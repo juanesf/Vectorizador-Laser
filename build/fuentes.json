@@ -1,0 +1,310 @@
+[
+ {
+  "key": "alfa",
+  "name": "Alfa Slab",
+  "file": "AlfaSlabOne-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": false
+ },
+ {
+  "key": "passion",
+  "name": "Passion One",
+  "file": "PassionOne-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": false
+ },
+ {
+  "key": "anton",
+  "name": "Anton",
+  "file": "Anton-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": true
+ },
+ {
+  "key": "bebas",
+  "name": "Bebas Neue",
+  "file": "BebasNeue-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": true
+ },
+ {
+  "key": "archivo",
+  "name": "Archivo Black",
+  "file": "ArchivoBlack-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": true
+ },
+ {
+  "key": "ultra",
+  "name": "Ultra",
+  "file": "Ultra-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": true
+ },
+ {
+  "key": "abril",
+  "name": "Abril Fatface",
+  "file": "AbrilFatface-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": false
+ },
+ {
+  "key": "bowlby",
+  "name": "Bowlby One",
+  "file": "BowlbyOneSC-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": false
+ },
+ {
+  "key": "staat",
+  "name": "Staatliches",
+  "file": "Staatliches-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": true
+ },
+ {
+  "key": "rubikmono",
+  "name": "Rubik Mono",
+  "file": "RubikMonoOne-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": true
+ },
+ {
+  "key": "graduate",
+  "name": "Graduate",
+  "file": "Graduate-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": false
+ },
+ {
+  "key": "bungee",
+  "name": "Bungee",
+  "file": "Bungee-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": true
+ },
+ {
+  "key": "righteous",
+  "name": "Righteous",
+  "file": "Righteous-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": true
+ },
+ {
+  "key": "concert",
+  "name": "Concert One",
+  "file": "ConcertOne-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": false
+ },
+ {
+  "key": "fugaz",
+  "name": "Fugaz One",
+  "file": "FugazOne-Regular.ttf",
+  "group": "Gruesas y de bloque",
+  "subset": false
+ },
+ {
+  "key": "titan",
+  "name": "Titan One",
+  "file": "TitanOne-Regular.ttf",
+  "group": "Redondeadas e infantiles",
+  "subset": false
+ },
+ {
+  "key": "lilita",
+  "name": "Lilita One",
+  "file": "LilitaOne-Regular.ttf",
+  "group": "Redondeadas e infantiles",
+  "subset": false
+ },
+ {
+  "key": "luckiest",
+  "name": "Luckiest Guy",
+  "file": "LuckiestGuy-Regular.ttf",
+  "group": "Redondeadas e infantiles",
+  "subset": true
+ },
+ {
+  "key": "chewy",
+  "name": "Chewy",
+  "file": "Chewy-Regular.ttf",
+  "group": "Redondeadas e infantiles",
+  "subset": true
+ },
+ {
+  "key": "sniglet",
+  "name": "Sniglet",
+  "file": "Sniglet-ExtraBold.ttf",
+  "group": "Redondeadas e infantiles",
+  "subset": false
+ },
+ {
+  "key": "cherry",
+  "name": "Cherry Bomb",
+  "file": "CherryBombOne-Regular.ttf",
+  "group": "Redondeadas e infantiles",
+  "subset": true
+ },
+ {
+  "key": "bangers",
+  "name": "Bangers",
+  "file": "Bangers-Regular.ttf",
+  "group": "Redondeadas e infantiles",
+  "subset": true
+ },
+ {
+  "key": "pacifico",
+  "name": "Pacifico",
+  "file": "Pacifico-Regular.ttf",
+  "group": "Cursivas gruesas (corte)",
+  "subset": true
+ },
+ {
+  "key": "lobster",
+  "name": "Lobster",
+  "file": "Lobster-Regular.ttf",
+  "group": "Cursivas gruesas (corte)",
+  "subset": false
+ },
+ {
+  "key": "kaushan",
+  "name": "Kaushan Script",
+  "file": "KaushanScript-Regular.ttf",
+  "group": "Cursivas gruesas (corte)",
+  "subset": false
+ },
+ {
+  "key": "yellowtail",
+  "name": "Yellowtail",
+  "file": "Yellowtail-Regular.ttf",
+  "group": "Cursivas gruesas (corte)",
+  "subset": true
+ },
+ {
+  "key": "cookie",
+  "name": "Cookie",
+  "file": "Cookie-Regular.ttf",
+  "group": "Cursivas gruesas (corte)",
+  "subset": false
+ },
+ {
+  "key": "grandhotel",
+  "name": "Grand Hotel",
+  "file": "GrandHotel-Regular.ttf",
+  "group": "Cursivas gruesas (corte)",
+  "subset": true
+ },
+ {
+  "key": "courgette",
+  "name": "Courgette",
+  "file": "Courgette-Regular.ttf",
+  "group": "Cursivas gruesas (corte)",
+  "subset": false
+ },
+ {
+  "key": "leckerli",
+  "name": "Leckerli One",
+  "file": "LeckerliOne-Regular.ttf",
+  "group": "Cursivas gruesas (corte)",
+  "subset": false
+ },
+ {
+  "key": "satisfy",
+  "name": "Satisfy",
+  "file": "Satisfy-Regular.ttf",
+  "group": "Cursivas gruesas (corte)",
+  "subset": true
+ },
+ {
+  "key": "playball",
+  "name": "Playball",
+  "file": "Playball-Regular.ttf",
+  "group": "Cursivas gruesas (corte)",
+  "subset": true
+ },
+ {
+  "key": "shrikhand",
+  "name": "Shrikhand",
+  "file": "Shrikhand-Regular.ttf",
+  "group": "Cursivas gruesas (corte)",
+  "subset": true
+ },
+ {
+  "key": "greatvibes",
+  "name": "Great Vibes",
+  "file": "GreatVibes-Regular.ttf",
+  "group": "Cursivas finas (mejor para grabado)",
+  "subset": true
+ },
+ {
+  "key": "sacramento",
+  "name": "Sacramento",
+  "file": "Sacramento-Regular.ttf",
+  "group": "Cursivas finas (mejor para grabado)",
+  "subset": true
+ },
+ {
+  "key": "allura",
+  "name": "Allura",
+  "file": "Allura-Regular.ttf",
+  "group": "Cursivas finas (mejor para grabado)",
+  "subset": true
+ },
+ {
+  "key": "alexbrush",
+  "name": "Alex Brush",
+  "file": "AlexBrush-Regular.ttf",
+  "group": "Cursivas finas (mejor para grabado)",
+  "subset": true
+ },
+ {
+  "key": "blackops",
+  "name": "Black Ops",
+  "file": "BlackOpsOne-Regular.ttf",
+  "group": "Esténcil y especiales",
+  "subset": true
+ },
+ {
+  "key": "stardos",
+  "name": "Stardos Stencil",
+  "file": "StardosStencil-Bold.ttf",
+  "group": "Esténcil y especiales",
+  "subset": true
+ },
+ {
+  "key": "saira",
+  "name": "Saira Stencil",
+  "file": "SairaStencilOne-Regular.ttf",
+  "group": "Esténcil y especiales",
+  "subset": true
+ },
+ {
+  "key": "allerta",
+  "name": "Allerta Stencil",
+  "file": "AllertaStencil-Regular.ttf",
+  "group": "Esténcil y especiales",
+  "subset": false
+ },
+ {
+  "key": "rye",
+  "name": "Rye (western)",
+  "file": "Rye-Regular.ttf",
+  "group": "Esténcil y especiales",
+  "subset": false
+ },
+ {
+  "key": "marker",
+  "name": "Permanent Marker",
+  "file": "PermanentMarker-Regular.ttf",
+  "group": "Esténcil y especiales",
+  "subset": true
+ },
+ {
+  "key": "rancho",
+  "name": "Rancho",
+  "file": "Rancho-Regular.ttf",
+  "group": "Esténcil y especiales",
+  "subset": true
+ }
+]

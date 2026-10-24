@@ -1,0 +1,5 @@
+* text=auto eol=lf
+*.ttf binary
+*.gz binary
+*.zip binary
+index.html -diff linguist-generated

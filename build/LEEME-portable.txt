@@ -1,0 +1,32 @@
+VECTORIZADOR LÁSER — versión portable
+=====================================
+
+CÓMO SE USA
+1. Abre “Vectorizador Laser.html” con doble clic. Recomendado: Google Chrome o Microsoft Edge
+   actualizados (también funciona en Firefox y Safari recientes).
+2. No necesita instalación ni internet: tipografías, íconos y librerías vienen dentro del archivo.
+3. Puedes copiar la carpeta a un pendrive, a otro computador o a una nube (Drive, OneDrive, Dropbox).
+
+TU TRABAJO SE GUARDA SOLO
+- El programa guarda automáticamente tu trabajo en el navegador cada vez que haces un cambio.
+  Al volver a abrirlo, retoma donde quedaste.
+- Ese guardado vive en ESE navegador de ESE computador (y depende de la ubicación del archivo).
+  Para llevar tu trabajo a otro equipo usa “Guardar proyecto” (descarga un .proyecto.json)
+  y luego “Abrir proyecto”.
+- “Nuevo” borra el trabajo guardado y empieza de cero (pide confirmar).
+- Si borras los datos de navegación, también se borra el guardado automático:
+  guarda como proyecto los trabajos importantes.
+
+UNIDADES
+- Elige mm, cm o pulgadas arriba, junto al título. SVG y DXF se descargan en esa unidad;
+  PDF, EPS, PLT y PNG mantienen el tamaño real.
+
+ARCHIVOS PARA LA MÁQUINA
+- LightBurn (.lbrn2): abre el proyecto con las capas, potencia y velocidad ya puestas.
+- Ruida (.rd): el archivo que la máquina lee desde un pendrive (beta: prueba con baja potencia
+  y usa “Frame/Marco” antes). Para editar en RDWorks importa DXF o PLT.
+- Ajusta potencia y velocidad en “Descargar” → “Potencia y velocidad”.
+
+LICENCIA
+- Software libre GPL-3.0 o posterior (ver LICENSE). Autores: Cecilia Vivot y Juan Sanchez.
+- Licencias de lo incluido: LICENCIAS-TERCEROS.txt. Todo permite uso comercial; lo que fabriques es tuyo.
