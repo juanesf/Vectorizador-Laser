@@ -1,5 +1,10 @@
 # Cambios
 
+## 1.1.1 — 2026-10-25
+
+- Foto a trama: nuevo botón “Enviar la trama a Diseño libre”. La trama llega como imagen (con su contorno de corte, si lo tiene) y se puede mover, escalar, girar y espejar junto al resto del cartel. Las tramas de círculos vectoriales llegan como vectores.
+- Diseño libre: las tramas de foto salen en SVG, PNG y LightBurn (como imagen en su propia capa). En DXF, PDF, EPS, PLT y Ruida sale solo lo vectorial, con un aviso.
+
 ## 1.1.0 — 2026-10-25
 
 - Área de trabajo de la máquina configurable junto a las unidades (por ejemplo 600 × 400 mm), con medidas comunes. Se dibuja en la vista previa y avisa si el diseño no cabe.

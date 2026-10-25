@@ -1,5 +1,5 @@
 <!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><!--
-  Vectorizador Láser v1.1.0
+  Vectorizador Láser v1.1.1
   Copyright (C) 2026 Cecilia Vivot <ceciliavivot@gmail.com> y Juan Sanchez <juanesf91@gmail.com>
   Co-asistido por Claude (Anthropic).
   Este programa es software libre: puedes redistribuirlo y/o modificarlo bajo los términos de la
@@ -434,6 +434,7 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
       <label class="drop" id="phDrop"><b>Subir foto</b><span class="sub">JPG, PNG o WEBP. También puedes arrastrarla o pegarla (Ctrl+V).</span><input type="file" id="phFile" accept="image/*" hidden></label>
       <div class="thumbs" style="grid-template-columns:1fr"><figure><canvas id="phThumb" width="320" height="200"></canvas><figcaption id="phCap">Ejemplo incluido</figcaption></figure></div>
       <div class="chips g3" id="phView"><button class="chip" data-v="result">Resultado</button><button class="chip" data-v="orig">Original</button></div>
+      <button class="btn" id="phToDesign" style="align-self:flex-start">Enviar la trama a Diseño libre →</button>
       <div class="info" id="phOutInfo" hidden>Esta foto trae un <b style="color:var(--cut)">contorno de corte</b> desde Herramientas: sale en el SVG y en el .zip. <button class="btn" id="phOutDel">Quitar contorno</button></div>
     </section>
     <section class="sec" data-for="foto">
@@ -8315,7 +8316,7 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
 })();
 </script>
 <dialog id="aboutDlg" class="about">
-  <h2>Vectorizador Láser <small>v1.1.0</small></h2>
+  <h2>Vectorizador Láser <small>v1.1.1</small></h2>
   <p>Creado por <b>Cecilia Vivot</b> y <b>Juan Sanchez</b>. Co-asistido por Claude (Anthropic).</p>
   <p>Software libre bajo licencia <b>GPL-3.0 o posterior</b>: puedes usarlo, copiarlo, modificarlo y compartirlo, siempre manteniendo la misma licencia y entregando el código. Lo que fabriques con el programa (piezas cortadas o grabadas) es tuyo y puedes venderlo sin restricciones.</p>
   <p class="sub">Incluye: opentype.js (MIT), Clipper (Boost), tipografías de Google Fonts (OFL / Apache 2.0), íconos Fluent Emoji High Contrast, Phosphor y Tabler (MIT) y Material Design Icons (Apache 2.0). El archivo .rd usa la codificación documentada por meerk40t (MIT). Ideas de cajas inspiradas en boxes.py de Florian Festi.</p>
@@ -8620,7 +8621,7 @@ function imgShape(e){const I=IMGS[e.img];if(!I)return normRings([R(-.5,-.5,.5,.5
     despeckle(fg,w,h,Math.round(w*h/40000));const rs=traceBinary(fg,w,h).map(r=>chaikin(simplifyRing(r,0.7),1)).filter(r=>r.length>=3);
     const fr=rs.length?fromC(union(toC(rs.map(r=>r.map(p=>[p[0]/10,p[1]/10]))),CL.PolyFillType.pftEvenOdd)):[];I.cache[key]=fr.length?(e.full?normFrame(fr,w/10,h/10):normRings(fr)):normRings([R(-.5,-.5,.5,.5)])}
   return I.cache[key]}
-function contentShape(e){return e.shape==='text'?textShape(e):e.shape==='img'?imgShape(e):e.shape==='svg'?(SVGS[e.svg]||normRings([R(-.5,-.5,.5,.5)])):libShape(e.lib)}
+function contentShape(e){if(e.shape==='ras'){const I=IMGS[e.img];return {rings:[[[-.5,-.5],[.5,-.5],[.5,.5],[-.5,.5]]],aspect:I&&I.img?I.img.width/I.img.height:1}}return e.shape==='text'?textShape(e):e.shape==='img'?imgShape(e):e.shape==='svg'?(SVGS[e.svg]||normRings([R(-.5,-.5,.5,.5)])):libShape(e.lib)}
 function shapeRings(e,ref){
   const W=ref.W,cx=ref.x0+e.cx*W,cy=ref.y0+e.cy*W,w=Math.max(0.05,e.w*W),h=Math.max(0.05,e.h*W),rot=(e.rot||0)*Math.PI/180;
   if(e.shape==='text'||e.shape==='img'||e.shape==='svg'||(e.shape==='lib'&&LIB[e.lib]))return contentShape(e).rings.map(r=>place(r.map(p=>[p[0]*w,p[1]*h]),cx,cy,rot));
@@ -9074,7 +9075,8 @@ function layersFor(r,keep){const L={cut:[...(r.cut||[])],engrave:[...(r.engrave|
 const hexRGB=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255);
 function makeSVG(r){const L=layersFor(r,true);const f=1/UNITS[S.unit],U=S.unit,q=v=>(+(v*f).toFixed(U==='mm'?3:5)).toString();
   const d=(rs)=>rs.map(x=>'M'+x.map(p=>q(p[0])+','+q(p[1])).join(' L')+' Z').join(' '),dO=(rs)=>rs.map(x=>'M'+x.map(p=>q(p[0])+','+q(p[1])).join(' L')).join(' ');
-  let s=`<?xml version="1.0" encoding="UTF-8"?>\n<!-- Vectorizador Laser · unidades: ${U} -->\n<svg xmlns="http://www.w3.org/2000/svg" width="${q(r.W)}${U}" height="${q(r.H)}${U}" viewBox="0 0 ${q(r.W)} ${q(r.H)}">\n`;const sw=q(0.1);
+  let s=`<?xml version="1.0" encoding="UTF-8"?>\n<!-- Vectorizador Laser · unidades: ${U} -->\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${q(r.W)}${U}" height="${q(r.H)}${U}" viewBox="0 0 ${q(r.W)} ${q(r.H)}">\n`;const sw=q(0.1);
+  if((r.rasters||[]).length)s+='<g id="trama">'+r.rasters.map(o=>`<image xlink:href="${o.url}" href="${o.url}" x="${q(-o.w/2)}" y="${q(-o.h/2)}" width="${q(o.w)}" height="${q(o.h)}" preserveAspectRatio="none" transform="translate(${q(o.x)} ${q(o.y)}) rotate(${+o.rot.toFixed(3)}) scale(${o.fx?-1:1} ${o.fy?-1:1})"/>`).join('')+'</g>\n';
   if(L.engrave.length)s+=`<g id="grabado"><path fill="#000000" fill-rule="evenodd" stroke="none" d="${d(L.engrave)}"/></g>\n`;
   for(const l of L.layers){s+=`<g id="${l.name}">`;if(l.rings.length)s+=l.fill?`<path fill="${l.color}" fill-rule="evenodd" stroke="none" d="${d(l.rings)}"/>`:`<path fill="none" stroke="${l.color}" stroke-width="${sw}" d="${d(l.rings)}"/>`;
     if(l.open&&l.open.length)s+=`<path fill="none" stroke="${l.color}" stroke-width="${sw}" d="${dO(l.open)}"/>`;s+='</g>\n'}
@@ -9127,6 +9129,7 @@ function makePLT(r){const L=layersFor(r,true);const u=40;let s='IN;PA;';
 async function makePNG(r){const dpi=+$('dpi').value;const k=dpi/25.4;const pad=Math.round(2*k);
   let w=Math.ceil(r.W*k)+pad*2,h=Math.ceil(r.H*k)+pad*2;if(w*h>140e6){throw new Error('Demasiado grande para PNG a '+dpi+' DPI; baja los DPI o el tamaño')}
   const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,w,h);g.fillStyle='#000';
+  for(const q of r.rasters||[]){g.save();g.imageSmoothingEnabled=false;g.translate(pad+q.x*k,pad+q.y*k);g.rotate(q.rot*Math.PI/180);g.scale(q.fx?-1:1,q.fy?-1:1);g.globalCompositeOperation='multiply';g.drawImage(q.img,-q.w*k/2,-q.h*k/2,q.w*k,q.h*k);g.restore()}
   const LL=layersFor(r);r={...r,cut:LL.cut,engrave:LL.engrave};const rs=r.engrave.length?r.engrave:[...r.cut,...(r.acr||[])];const P=new Path2D();for(const ring of rs){ring.forEach((q,i)=>{const x=pad+q[0]*k,y=pad+q[1]*k;i?P.lineTo(x,y):P.moveTo(x,y)});P.closePath()}
   g.fill(P,'evenodd');
   if(r.engrave.length&&r.cut.length){const C=new Path2D();for(const ring of r.cut){ring.forEach((q,i)=>{const x=pad+q[0]*k,y=pad+q[1]*k;i?C.lineTo(x,y):C.moveTo(x,y)});C.closePath()}g.lineWidth=Math.max(1,0.15*k);g.strokeStyle='#000';g.stroke(C)}
@@ -9159,7 +9162,7 @@ async function offer(filename,data){
   const blob=data instanceof Blob?data:new Blob([data]);const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();
   setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000);toast('Descargando '+filename);
 }
-function mirrorR(r){const m=rs=>(rs||[]).map(x=>x.map(p=>[r.W-p[0],p[1]]).reverse());return {...r,cut:m(r.cut),engrave:m(r.engrave),guide:m(r.guide),acr:m(r.acr)}}
+function mirrorR(r){const m=rs=>(rs||[]).map(x=>x.map(p=>[r.W-p[0],p[1]]).reverse());return {...r,cut:m(r.cut),engrave:m(r.engrave),guide:m(r.guide),acr:m(r.acr),rasters:(r.rasters||[]).map(q=>({...q,x:r.W-q.x,fx:!q.fx,rot:-q.rot}))}}
 /* ---------- archivos para la máquina: LightBurn (.lbrn2) y Ruida (.rd) ---------- */
 const LASER_DEF={cp:60,cv:15,cn:1,ep:20,ev:300,ei:0.1,origin:'current'};
 function lzr(){return Object.assign({},LASER_DEF,S.laser||{})}
@@ -9177,12 +9180,13 @@ function machineLayers(r){const Z=lzr(),L=layersFor(r,true);const out=[];
   if(L.guide.length)add(1,Object.assign({},cutO,{name:'Guía',color:LB[1],out:false}),L.guide,[]);
   return out}
 /* LightBurn .lbrn2 (XML). Y hacia arriba, milímetros. */
-function makeLBRN(r,bitmap){const H=r.H,q=v=>(+(+v).toFixed(4)).toString(),Z=lzr();const groups=machineLayers(r);
+function makeLBRN(r,bitmap){if(!bitmap&&(r.rasters||[]).length)bitmap=r.rasters.map(o=>({idx:0,W:o.w,H:o.h,dot:o.dot,name:o.name||'trama.png',b64:String(o.url).split(',')[1]||'',x:o.x,y:o.y,rot:o.rot,fx:o.fx,fy:o.fy}));const bms=bitmap?(Array.isArray(bitmap)?bitmap:[bitmap]):[];bitmap=bms[0];const H=r.H,q=v=>(+(+v).toFixed(4)).toString(),Z=lzr();const groups=machineLayers(r);if(bms.length){let fi=0;while(groups.some(g=>g.idx===fi))fi++;for(const bm of bms)bm.idx=fi}
   let s=`<?xml version="1.0" encoding="UTF-8"?>\n<!-- Creado con Vectorizador Laser -->\n<LightBurnProject AppVersion="1.4.00" FormatVersion="1" MaterialHeight="0" MirrorX="False" MirrorY="False">\n`;
   const cs=(g,pri)=>{s+=`    <CutSetting type="${g.fill?'Scan':'Cut'}">\n        <index Value="${g.idx}"/>\n        <name Value="${xmlA(g.name)}"/>\n        <minPower Value="${q(g.power)}"/>\n        <maxPower Value="${q(g.power)}"/>\n        <minPower2 Value="${q(g.power)}"/>\n        <maxPower2 Value="${q(g.power)}"/>\n        <speed Value="${q(g.speed)}"/>\n        <numPasses Value="${Math.max(1,g.passes|0)}"/>\n        <priority Value="${pri}"/>\n`+(g.fill?`        <interval Value="${q(g.interval||Z.ei)}"/>\n        <crossHatch Value="0"/>\n`:'')+(g.out?'':`        <doOutput Value="0"/>\n`)+`    </CutSetting>\n`};
   const ord=groups.slice().sort((a,b)=>(a.fill===b.fill?0:a.fill?-1:1));ord.forEach((g,i)=>cs(g,i));
   if(bitmap)s+=`    <CutSetting_Img type="Image">\n        <index Value="${bitmap.idx}"/>\n        <name Value="Foto"/>\n        <minPower Value="0"/>\n        <maxPower Value="${q(Z.ep)}"/>\n        <maxPower2 Value="${q(Z.ep)}"/>\n        <speed Value="${q(Z.ev)}"/>\n        <priority Value="0"/>\n        <interval Value="${q(bitmap.dot)}"/>\n        <dpi Value="${Math.round(25.4/bitmap.dot)}"/>\n        <ditherMode Value="threshold"/>\n        <passThrough Value="1"/>\n        <negativeImage Value="0"/>\n    </CutSetting_Img>\n`;
-  if(bitmap)s+=`    <Shape Type="Bitmap" CutIndex="${bitmap.idx}" W="${q(bitmap.W)}" H="${q(bitmap.H)}" Gamma="1" Contrast="0" Brightness="0" EnhanceAmount="0" EnhanceRadius="0" EnhanceDenoise="0" File="${xmlA(bitmap.name)}" SourceHash="0" Data="${bitmap.b64}">\n        <XForm>1 0 0 1 ${q(bitmap.W/2)} ${q(H-bitmap.H/2)}</XForm>\n    </Shape>\n`;
+  for(const bm of bms){const cx=bm.x??bm.W/2,cy=bm.y??bm.H/2,a=-(bm.rot||0)*Math.PI/180,sx=bm.fx?-1:1,sy=bm.fy?-1:1;const xf=[Math.cos(a)*sx,Math.sin(a)*sx,-Math.sin(a)*sy,Math.cos(a)*sy,cx,H-cy].map(q).join(' ');
+    s+=`    <Shape Type="Bitmap" CutIndex="${bm.idx}" W="${q(bm.W)}" H="${q(bm.H)}" Gamma="1" Contrast="0" Brightness="0" EnhanceAmount="0" EnhanceRadius="0" EnhanceDenoise="0" File="${xmlA(bm.name)}" SourceHash="0" Data="${bm.b64}">\n        <XForm>${xf}</XForm>\n    </Shape>\n`}
   const shape=(pts,closed,idx)=>{let v='';for(const p of pts)v+=`V${q(p[0])} ${q(H-p[1])}`;let pl='LineClosed';if(!closed){pl='';for(let i=0;i<pts.length-1;i++)pl+=`L${i} ${i+1}`}
     return `        <Shape Type="Path" CutIndex="${idx}">\n            <XForm>1 0 0 1 0 0</XForm>\n            <VertList>${v}</VertList>\n            <PrimList>${pl}</PrimList>\n        </Shape>\n`};
   for(const g of groups){const items=[...g.closed.filter(x=>x.length>2).map(x=>shape(x,true,g.idx)),...g.open.filter(x=>x.length>1).map(x=>shape(x,false,g.idx))];if(!items.length)continue;
@@ -9233,6 +9237,7 @@ async function doExport(f){
   const base=($('fname').value.trim()||suggestName()).replace(/[\\/:*?"<>|]+/g,'-');if(RESULT.photo&&!RESULT.vec){try{return await phExport(f,base)}catch(e){console.error(e);return toast(e.message)}}
   if(RESULT.tool&&RESULT.engraveImg){if(f==='png'){const mk=tlMask();const c=maskedCanvas(mk,Math.min(3000,Math.round(S.tools.bg.w*10)),false);const bl=await new Promise(x=>c.toBlob(x,'image/png'));return offer(base+'.png',withDpi(new Uint8Array(await bl.arrayBuffer()),254))}
     return toast('Para la foto sin fondo usa “Enviar a Foto a trama” o descarga PNG. Para un contorno de corte elige “Silueta (corte)”.')}let r=RESULT.design?RESULT.exp():RESULT;if($('mirrorOut').checked)r=mirrorR(r);
+  if((r.rasters||[]).length&&['dxf','pdf','eps','plt','rd'].includes(f))toast('La trama de foto no cabe en '+f.toUpperCase()+': sale solo lo vectorial. Para la trama usa SVG, PNG o LightBurn.');
   try{
     if(f==='svg')return offer(base+'.svg',makeSVG(r));
     if(f==='pdf')return offer(base+'.pdf',makePDF(r));
@@ -9412,27 +9417,30 @@ function objCorners(o,pad=0){const a=(o.rot||0)*Math.PI/180,c=Math.cos(a),s=Math
   return [[-hw,-hh],[hw,-hh],[hw,hh],[-hw,hh]].map(([x,y])=>[o.x+x*c-y*s,o.y+x*s+y*c])}
 const ROLE={cut:'Cortar',eng:'Grabar',hole:'Calar'};
 const roleColor=r=>r==='cut'?'var(--cut)':r==='hole'?'var(--edit)':'var(--fill)';
-const objName=o=>o.shape==='svg'?(SVGS[o.svg]?.name||'Ícono').slice(0,14):o.shape==='text'?'“'+(o.text||'').replace(/\n/g,' ').slice(0,14)+'”':o.shape==='img'?(IMGS[o.img]?.name||'Imagen').slice(0,14):(LIB[o.lib]?.name||'Forma');
+const objName=o=>o.shape==='ras'?(IMGS[o.img]?.name||'Trama').slice(0,14):o.shape==='svg'?(SVGS[o.svg]?.name||'Ícono').slice(0,14):o.shape==='text'?'“'+(o.text||'').replace(/\n/g,' ').slice(0,14)+'”':o.shape==='img'?(IMGS[o.img]?.name||'Imagen').slice(0,14):(LIB[o.lib]?.name||'Forma');
 function buildDesign(){
   const D=S.design,O=OBJ(),st=O.map(()=>null);
-  const rc=O.map(o=>{let r=toC(objRings(o));if(o.grow)r=offset(union(r),o.grow);return r});
+  const rc=O.map(o=>{if(o.shape==='ras')return [];let r=toC(objRings(o));if(o.grow)r=offset(union(r),o.grow);return r});
+  const rasters=[];O.forEach((o,i)=>{if(o.shape!=='ras'||!IMGS[o.img])return;const I=IMGS[o.img];rasters.push({url:I.url,img:I.img,x:o.x,y:o.y,w:o.w,h:o.h,rot:o.rot||0,fx:!!o.fx,fy:!!o.fy,dot:o.w/I.img.width,name:I.name});
+    st[i]={ok:1,msg:`Trama de foto (imagen): se graba. Punto efectivo ${(o.w/I.img.width).toFixed(3).replace('.',',')} mm${I.dot&&Math.abs(o.w/I.img.width-I.dot)>0.005?` (la trama se hizo con ${String(I.dot).replace('.',',')} mm; si cambias mucho el tamaño, mejor recalcula en Foto a trama)`:''}. Sale en SVG, PNG y LightBurn.`}});
   const hl=[];O.forEach((o,i)=>{if(o.role==='hole')hl.push(...rc[i])});const H=hl.length?union(hl):[];
   const groups=new Map();O.forEach((o,i)=>{if(o.role!=='cut')return;const k=o.grp||('s'+o.id);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(i)});
   const cut=[],pre=[];let pieces=0;
   for(const [,idx] of groups){let u=union(idx.flatMap(i=>rc[i]));pre.push(...u);if(H.length)u=diff(u,H);const n=toPieces(u,0).length;pieces+=n;cut.push(...u);
     for(const i of idx)st[i]=idx.length>1?(n>1?{warn:1,msg:`Está unido con ${idx.length-1} objeto(s), pero no se tocan: salen ${n} piezas separadas. Acércalos hasta que se superpongan.`}:{ok:1,msg:`Unido con ${idx.length-1} objeto(s): se corta como una sola pieza.`}):{ok:1,msg:'Se corta como pieza propia.'}}
   const all=cut.length?union(cut):[];const eng=[];
-  O.forEach((o,i)=>{if(o.role==='eng'){eng.push(...rc[i]);st[i]=all.length&&netArea(inter(rc[i],all))<0.01?{warn:1,msg:'No está sobre ninguna pieza de corte. Se grabará igual (por ejemplo sobre una tabla ya cortada).'}:{ok:1,msg:'Se graba (no se corta).'}}
+  O.forEach((o,i)=>{if(o.shape==='ras')return;if(o.role==='eng'){eng.push(...rc[i]);st[i]=all.length&&netArea(inter(rc[i],all))<0.01?{warn:1,msg:'No está sobre ninguna pieza de corte. Se grabará igual (por ejemplo sobre una tabla ya cortada).'}:{ok:1,msg:'Se graba (no se corta).'}}
     else if(o.role==='hole')st[i]=!pre.length||netArea(inter(rc[i],pre))<0.01?{warn:1,off:1,msg:'No está sobre ninguna pieza de corte: no cala nada.'}:{ok:1,msg:'Calado: hace un hueco en las piezas que toca.'}});
   const cutMM=fromC(cut),engMM=eng.length?fromC(union(eng)):[];const board=[[0,0],[D.W,0],[D.W,D.H],[0,D.H]];
-  const out={design:true,cut:cutMM,engrave:engMM,guide:[board],W:D.W,H:D.H,sx:0,sy:0,ref:{x0:0,y0:0,W:1,H:1},status:st,info:{holes:0,pieces},empty:!cutMM.length&&!engMM.length};
+  const out={design:true,cut:cutMM,engrave:engMM,guide:[board],W:D.W,H:D.H,sx:0,sy:0,ref:{x0:0,y0:0,W:1,H:1},status:st,info:{holes:0,pieces},empty:!cutMM.length&&!engMM.length&&!rasters.length,rasters};
   out.cutLen=cutMM.reduce((a,r)=>a+ringLen(r),0);out.paths=cutMM.length+engMM.length;
-  out.exp=()=>{const bb=bboxOf([...cutMM,...engMM,board]);const sh=r=>r.map(p=>[p[0]-bb.x0,p[1]-bb.y0]);
-    return {cut:cutMM.map(sh),engrave:engMM.map(sh),guide:[sh(board)],acr:[],W:bb.w,H:bb.h,cutLen:out.cutLen,paths:out.paths}};
+  out.exp=()=>{const bb=bboxOf([...cutMM,...engMM,board,...rasters.map(q=>objCorners(q))]);const sh=r=>r.map(p=>[p[0]-bb.x0,p[1]-bb.y0]);
+    return {cut:cutMM.map(sh),engrave:engMM.map(sh),guide:[sh(board)],acr:[],W:bb.w,H:bb.h,cutLen:out.cutLen,paths:out.paths,rasters:rasters.map(q=>({...q,x:q.x-bb.x0,y:q.y-bb.y0}))}};
   return out;
 }
 function dsRender(){const pv=$('pv'),R=RESULT,D=S.design;
   pv.innerHTML=`<g id="geo" pointer-events="none"><rect x="0" y="0" width="${D.W}" height="${D.H}" fill="var(--card)" stroke="var(--muted)" stroke-width="1" stroke-dasharray="6 4" vector-effect="non-scaling-stroke"/>`+
+    (R.rasters||[]).map(q=>`<image href="${q.url}" x="${-q.w/2}" y="${-q.h/2}" width="${q.w}" height="${q.h}" preserveAspectRatio="none" transform="translate(${q.x} ${q.y}) rotate(${q.rot}) scale(${q.fx?-1:1} ${q.fy?-1:1})" style="image-rendering:pixelated;mix-blend-mode:multiply"/>`).join('')+
     (R.engrave.length?`<path d="${dStr(R.engrave)}" fill="var(--fill)" fill-opacity=".85" fill-rule="evenodd"/>`:'')+
     (R.cut.length?`<path d="${dStr(R.cut)}" fill="none" stroke="var(--cut)" stroke-width="1.6" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>`:'')+
     (OBJ().length?'':`<text x="${D.W/2}" y="${D.H/2}" text-anchor="middle" font-size="${Math.min(D.W,D.H)*0.05}" fill="var(--muted)" font-family="Figtree,system-ui,sans-serif">Agrega formas, textos o imágenes con la barra de arriba</text>`)+
@@ -9496,7 +9504,7 @@ $('dsPresets').addEventListener('click',e=>{const b=e.target.closest('[data-wh]'
 $('dsRot').onclick=()=>{dsArea(S.design.H,S.design.W)};
 /* acciones sobre la selección */
 function dsUnir(){const sel=dsSelected();if(sel.length<2){toast('Selecciona 2 o más objetos (Shift+clic) para unirlos');return}snap();const g='g'+Date.now().toString(36);
-  for(const o of sel){o.grp=g;if(o.role!=='cut'&&o.role!=='hole')o.role='cut'}schedule();toast('Unidos: se cortan como una sola pieza donde se tocan. Puedes seguir moviendo y editando cada uno.')}
+  for(const o of sel){if(o.shape==='ras')continue;o.grp=g;if(o.role!=='cut'&&o.role!=='hole')o.role='cut'}schedule();toast('Unidos: se cortan como una sola pieza donde se tocan. Puedes seguir moviendo y editando cada uno.')}
 function dsSep(){const sel=dsSelected().filter(o=>o.grp);if(!sel.length){toast('Los objetos seleccionados no están unidos');return}snap();for(const o of sel)o.grp=null;
   const c={};for(const o of OBJ())if(o.grp)c[o.grp]=(c[o.grp]||0)+1;for(const o of OBJ())if(o.grp&&c[o.grp]<2)o.grp=null;schedule()}
 function dsDup(){const sel=dsSelected();if(!sel.length)return;snap();const map={};const n=[];for(const o of sel){const c=JSON.parse(JSON.stringify(o));c.id=newId();c.x+=6;c.y+=6;if(o.grp)c.grp=map[o.grp]??=('g'+Date.now().toString(36)+n.length);n.push(c)}
@@ -9561,7 +9569,7 @@ function dsProps(){const P=$('props'),O=OBJ(),sel=dsSelected(),st=(RESULT&&RESUL
   const roles=cur=>`<div class="tools">${Object.entries(ROLE).map(([k,l])=>`<button class="tool" data-dsrole="${k}" aria-pressed="${cur===k}">${l}</button>`).join('')}</div>`;
   const aligns=`<div class="tools"><span class="gl" style="align-self:center">${sel.length>1?'Alinear':'Centrar en el área'}</span>${(sel.length>1?[['l','Izq.'],['ch','Centro'],['r','Der.'],['t','Arriba'],['cv','Medio'],['b','Abajo']]:[['ch','Horizontal'],['cv','Vertical']]).map(([m,l])=>`<button class="tool" data-dsal="${m}">${l}</button>`).join('')}</div>`;
   if(one){const i=O.indexOf(one),s=st[i]||{};
-    h+=`<div class="status ${s.warn?'warn':'ok'}" id="pstatus">${statusHtml(s)}</div>`+roles(one.role)+
+    h+=`<div class="status ${s.warn?'warn':'ok'}" id="pstatus">${statusHtml(s)}</div>`+(one.shape==='ras'?'':roles(one.role))+
     (one.shape==='text'?`<label class="f">Texto (Enter = otra línea)<textarea id="dstext" spellcheck="false">${(one.text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</textarea></label><div class="f">Tipografía<div class="dd ddwrap" id="dsfont"></div></div>`:'')+
     (one.shape==='img'?`<label class="f">Estilo<select id="dsistyle"><option value="thr" ${one.style!=='dots'?'selected':''}>Umbral (dibujo, logo)</option><option value="dots" ${one.style==='dots'?'selected':''}>Trama de puntos (foto)</option></select></label>`+(one.style==='dots'?`<label class="f">Celda (mm)<input id="dscell" inputmode="decimal" value="${one.cell||1}"></label><label class="f">Punto mínimo (mm)<input id="dsdmin" inputmode="decimal" value="${one.dmin??0.2}"></label>`:`<label class="f">Umbral<input type="range" id="dsthr" min="1" max="254" value="${one.thr??128}" style="width:150px"></label>`)+`<label class="mini"><input type="checkbox" id="dsinv" ${one.inv?'checked':''}> Invertir</label>`:'')+
     (one.shape==='lib'?`<span class="tool" style="cursor:default"><span style="width:18px;height:18px;display:inline-grid">${libIcon(one.lib)}</span>${LIB[one.lib].name}</span>`:'')+
@@ -9578,7 +9586,7 @@ function dsProps(){const P=$('props'),O=OBJ(),sel=dsSelected(),st=(RESULT&&RESUL
     btnHtml:it=>`<span class="ddv" style="font-family:'ff_${it.v}',var(--body)">${it.label}<small>${it.group}</small></span>`})}
 $('props').addEventListener('click',e=>{if(S.tab!=='diseno')return;const b=e.target.closest('button');if(!b)return;const O=OBJ();
   if(b.dataset.dsi!=null){const o=O[+b.dataset.dsi];if(e.shiftKey){DS.sel.has(o.id)?DS.sel.delete(o.id):DS.sel.add(o.id)}else DS.sel=new Set([o.id]);dsRefresh();return}
-  if(b.dataset.dsrole){snap();for(const o of dsSelected())o.role=b.dataset.dsrole;schedule();return}
+  if(b.dataset.dsrole){snap();for(const o of dsSelected())if(o.shape!=='ras')o.role=b.dataset.dsrole;schedule();return}
   if(b.dataset.dsal){dsAlign(b.dataset.dsal);return}
   const a=b.dataset.dsact;const one=dsSelected()[0];
   if(a==='fh')dsFlip(true);else if(a==='fv')dsFlip(false);else if(a==='unir')dsUnir();else if(a==='sep')dsSep();else if(a==='dup')dsDup();else if(a==='del')dsDel();
@@ -10291,6 +10299,13 @@ $('tlToDesignImg').onclick=()=>{const R=RESULT;if(!R||!TLIMG.img){toast('Primero
       const oc=dsAdd({shape:'svg',svg:sid,role:'cut'},0.4);Object.assign(oc,{w:bb.w*k,h:bb.h*k,x:cx+(bb.x0+bb.w/2-R.W/2)*k,y:cy+(bb.y0+bb.h/2-R.H/2)*k,grp});DS.sel=new Set([o.id,oc.id])}
     if(k<1)toast('La foto se achicó para caber en el área de trabajo; puedes agrandar el área.');else toast(withCut?'Foto (trama de puntos) y contorno de corte enviados juntos. Usa “Separar” para moverlos por separado.':'Foto enviada como trama de puntos. Puedes cambiar a “Umbral” en el panel de abajo.');
     schedule()};im.src=url};
+$('phToDesign').onclick=()=>{const R=RESULT;if(!R||!R.photo){toast('Primero genera la trama');return}const D=S.design;const k=Math.min(1,D.W*0.9/R.W,D.H*0.9/R.H);const W=R.W*k,H=R.H*k,cx=D.W/2,cy=D.H/2;
+  const nm=(PHOTO.name||'foto').replace(/\.[^.]+$/,'');const cutR=R.vec?(S.photo.vuse==='cut'?R.cut.slice(0,-1):[]):(R.cut||[]);const add=(o)=>{const z=dsAdd(o,0.4);Object.assign(z,{w:W,h:H,x:cx,y:cy});return z};
+  const finish=(ids)=>{DS.sel=new Set(ids);schedule();toast(k<1?'Trama enviada; se achicó para caber en el área de trabajo.':'Trama enviada a Diseño libre.')};
+  if(R.vec){setTab('diseno');const sid='s'+(++svgSeq);SVGS[sid]={name:nm+'-trama',...normFrame(S.photo.vuse==='cut'?cutR:R.engrave,R.W,R.H)};const o=add({shape:'svg',svg:sid,role:S.photo.vuse==='cut'?'hole':'eng'});finish([o.id]);return}
+  const url=R.raster.toDataURL('image/png');const im=new Image();im.onload=()=>{const id='i'+(++imgSeq);IMGS[id]={img:im,name:nm+'-trama.png',url,dot:R.dot};setTab('diseno');
+    const grp=cutR.length?'g'+newId():undefined;const o=add({shape:'ras',img:id,role:'eng'});if(grp)o.grp=grp;const ids=[o.id];
+    if(cutR.length){const sid='s'+(++svgSeq);SVGS[sid]={name:'Contorno',...normFrame(cutR,R.W,R.H)};const oc=add({shape:'svg',svg:sid,role:'cut'});oc.grp=grp;ids.push(oc.id)}finish(ids)};im.src=url};
 /* kerf medido */
 $('kfCalc').onclick=()=>{const m=parseFloat(String($('kfMeas').value).replace(',','.'));const K=TT().kerf;const nom=K.n*K.w;if(!(m>0&&m<nom)){toast(`Escribe la medida de las ${K.n} piezas juntas (debe ser menor a ${nom} mm)`);return}
   const k=(nom-m)/K.n;$('kfOut').innerHTML=`Kerf ≈ <b>${k.toFixed(3).replace('.',',')} mm</b>. <button class="btn" id="kfUse">Usar en cortes y cajas</button>`;
@@ -10550,7 +10565,7 @@ const SAVE_KEYS=['bed','grid','laser','tools','photo','tab','letra','numero','pa
 function bufToB64(buf){let s='';const u=new Uint8Array(buf);for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)}
 function snapshotState(){const st={app:'vectorizador-laser',v:1,t:Date.now(),S:{},imgs:{},svgs:{},fonts:{},IMG:null,seq:{imgSeq,svgSeq}};
   for(const k of SAVE_KEYS)st.S[k]=S[k];
-  for(const id in IMGS)if(IMGS[id].url)st.imgs[id]={name:IMGS[id].name,url:IMGS[id].url};
+  for(const id in IMGS)if(IMGS[id].url)st.imgs[id]={name:IMGS[id].name,url:IMGS[id].url,dot:IMGS[id].dot};
   for(const id in SVGS)st.svgs[id]={name:SVGS[id].name,rings:SVGS[id].rings.map(r=>r.map(p=>[+p[0].toFixed(5),+p[1].toFixed(5)])),aspect:SVGS[id].aspect};
   for(const k in FONTS)if(FONTS[k].ub64)st.fonts[k]={name:FONTS[k].name,b64:FONTS[k].ub64};
   if(IMG.url)st.IMG={name:IMG.name,url:IMG.url};if(PHOTO.url)st.PHOTO={name:PHOTO.name,url:PHOTO.url,outline:PHOTO.outline||null};if(TLIMG.url)st.TLIMG={name:TLIMG.name,url:TLIMG.url};return st}
@@ -10564,7 +10579,7 @@ async function applyState(st){
   if(!st||st.app!=='vectorizador-laser')throw new Error('El archivo no es un proyecto del Vectorizador Láser');
   RESTORING=true;
   for(const k in st.fonts||{}){try{const buf=b64ToBuf(st.fonts[k].b64);FONTS[k]={name:st.fonts[k].name,group:'Mis fuentes',font:opentype.parse(buf),ub64:st.fonts[k].b64};registerFontFace(k,buf)}catch(e){}}
-  for(const [id,o] of Object.entries(st.imgs||{})){const im=await loadImgUrl(o.url);if(im)IMGS[id]={img:im,name:o.name,url:o.url}}
+  for(const [id,o] of Object.entries(st.imgs||{})){const im=await loadImgUrl(o.url);if(im)IMGS[id]={img:im,name:o.name,url:o.url,dot:o.dot}}
   for(const [id,o] of Object.entries(st.svgs||{}))SVGS[id]=o;
   imgSeq=Math.max(imgSeq,st.seq?.imgSeq||0);svgSeq=Math.max(svgSeq,st.seq?.svgSeq||0);
   if(st.PHOTO){const im=await loadImgUrl(st.PHOTO.url);if(im){PHOTO.img=im;PHOTO.url=st.PHOTO.url;PHOTO.name=st.PHOTO.name;PHOTO.outline=st.PHOTO.outline||null;$('phCap').textContent=PHOTO.name;drawThumb($('phThumb'),im)}}
