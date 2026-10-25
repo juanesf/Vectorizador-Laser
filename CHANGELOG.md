@@ -1,5 +1,13 @@
 # Cambios
 
+## 1.2.0 — 2026-10-25
+
+- Diseño libre: la selección usa la forma real de cada objeto (no su rectángulo). Al hacer clic se elige el objeto más chico bajo el puntero, o el contorno que estás tocando.
+- Clic otra vez en el mismo lugar: elige el objeto de abajo y avisa cuál es (por ejemplo “2 de 3”).
+- Al pasar el mouse se resalta el objeto que se va a seleccionar.
+- Lista de objetos con nombres numerados cuando se repiten (“Silueta 1”, “Silueta 2”) y botón × para eliminar cada uno. Al pasar el mouse sobre la lista, el objeto se resalta en la vista (en rojo sobre ×).
+- La cuadrícula ahora va de 5 a 100 mm.
+
 ## 1.1.1 — 2026-10-25
 
 - Foto a trama: nuevo botón “Enviar la trama a Diseño libre”. La trama llega como imagen (con su contorno de corte, si lo tiene) y se puede mover, escalar, girar y espejar junto al resto del cartel. Las tramas de círculos vectoriales llegan como vectores.
@@ -8,7 +16,7 @@
 ## 1.1.0 — 2026-10-25
 
 - Área de trabajo de la máquina configurable junto a las unidades (por ejemplo 600 × 400 mm), con medidas comunes. Se dibuja en la vista previa y avisa si el diseño no cabe.
-- Cuadrícula con regla en milímetros (o la unidad elegida), ajustable de 10 a 100 mm. Por defecto mide 50 mm.
+- Cuadrícula con regla en milímetros (o la unidad elegida), ajustable de 5 a 100 mm. Por defecto mide 50 mm.
 - Todos los controles deslizantes permiten escribir el número directamente.
 - Herramientas → Quitar fondo / Recortar con forma: nuevo botón “Enviar a Diseño libre”. La foto llega como trama de puntos vectorial, junto con su contorno de corte y alineada con él.
 - Diseño libre: las imágenes tienen estilo “Umbral” (dibujos y logos) o “Trama de puntos” (fotos), con tamaño de celda y punto mínimo.
