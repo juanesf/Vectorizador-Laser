@@ -1,5 +1,5 @@
 <!--
-  Vectorizador Láser v1.2.1
+  Vectorizador Láser v1.2.2
   Copyright (C) 2026 Cecilia Vivot <ceciliavivot@gmail.com> y Juan Sanchez <juanesf91@gmail.com>
   Co-asistido por Claude (Anthropic).
   Este programa es software libre: puedes redistribuirlo y/o modificarlo bajo los términos de la
@@ -687,7 +687,7 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
 <script src="https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/clipper-lib@6.4.2/clipper.js"></script>
 <dialog id="aboutDlg" class="about">
-  <h2>Vectorizador Láser <small>v1.2.1</small></h2>
+  <h2>Vectorizador Láser <small>v1.2.2</small></h2>
   <p>Creado por <b>Cecilia Vivot</b> y <b>Juan Sanchez</b>. Co-asistido por Claude (Anthropic).</p>
   <p>Software libre bajo licencia <b>GPL-3.0 o posterior</b>: puedes usarlo, copiarlo, modificarlo y compartirlo, siempre manteniendo la misma licencia y entregando el código. Lo que fabriques con el programa (piezas cortadas o grabadas) es tuyo y puedes venderlo sin restricciones.</p>
   <p class="sub">Incluye: opentype.js (MIT), Clipper (Boost), tipografías de Google Fonts (OFL / Apache 2.0), íconos Fluent Emoji High Contrast, Phosphor y Tabler (MIT) y Material Design Icons (Apache 2.0). El archivo .rd usa la codificación documentada por meerk40t (MIT). Ideas de cajas inspiradas en boxes.py de Florian Festi.</p>
@@ -1830,6 +1830,11 @@ function dsRenderOv(){const g=$('ov');if(!g)return;const k=pxMM(),O=OBJ();let h=
         h+=`<line x1="${top[0]}" y1="${top[1]}" x2="${rx}" y2="${ry}" stroke="var(--accent)" stroke-width="1.2" vector-effect="non-scaling-stroke"/>`;
         h+=`<circle data-roh="${i}" cx="${rx}" cy="${ry}" r="${6*k}" fill="var(--card)" stroke="var(--accent)" stroke-width="2" vector-effect="non-scaling-stroke" pointer-events="all" style="cursor:grab"><title>Girar (Shift = de 15 en 15°)</title></circle>`;
         h+=`<circle data-rh="${i}" cx="${c[2][0]}" cy="${c[2][1]}" r="${6.5*k}" fill="var(--accent)" stroke="var(--card)" stroke-width="2" vector-effect="non-scaling-stroke" pointer-events="all" style="cursor:nwse-resize"><title>Cambiar tamaño (Shift = libre / proporcional)</title></circle>`}})}
+  if(!hide&&DS.sel.size>1){const bb=dsSelBox(),pd=6*k;const x0=bb.x0-pd,y0=bb.y0-pd,x1=bb.x1+pd,y1=bb.y1+pd,mx=(x0+x1)/2;
+    h+=`<rect x="${x0}" y="${y0}" width="${x1-x0}" height="${y1-y0}" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="7 4" vector-effect="non-scaling-stroke" pointer-events="none"/>`+
+      `<line x1="${mx}" y1="${y0}" x2="${mx}" y2="${y0-24*k}" stroke="var(--accent)" stroke-width="1.2" vector-effect="non-scaling-stroke"/>`+
+      `<circle data-gr="1" cx="${mx}" cy="${y0-24*k}" r="${7*k}" fill="var(--card)" stroke="var(--accent)" stroke-width="2" vector-effect="non-scaling-stroke" pointer-events="all" style="cursor:grab"><title>Girar todo (Shift = de 15 en 15°)</title></circle>`+
+      `<rect data-gh="1" x="${x1-7*k}" y="${y1-7*k}" width="${14*k}" height="${14*k}" rx="${3*k}" fill="var(--accent)" stroke="var(--card)" stroke-width="2" vector-effect="non-scaling-stroke" pointer-events="all" style="cursor:nwse-resize"><title>Escalar todo junto (Alt = desde el centro)</title></rect>`}
   if(DS.box){const b=DS.box;h+=`<rect x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${b[3]}" fill="var(--accent)" fill-opacity=".06" stroke="var(--accent)" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"/>`}
   g.innerHTML=h}
 function dsRefresh(){renderOv();syncProps();updateStats()}
@@ -1854,8 +1859,12 @@ let dsHovT=0;function dsHover(e){if(dsHovT)return;dsHovT=requestAnimationFrame((
   const hits=dsHits(svgPt(e));if(!hits.length){hv.innerHTML='';stage.style.cursor='';return}const cur=hits.find(h=>DS.sel.has(h.o.id));const t=cur?cur:hits[0];stage.style.cursor='move';
   if(DS.sel.has(t.o.id)){hv.innerHTML='';stage.title=hits.length>1?`${hits.length} objetos aquí: haz clic otra vez para elegir el de abajo`:'';return}
   hv.innerHTML=`<path d="${dStr(t.o.shape==='ras'||t.o.shape==='text'||t.o.shape==='img'?[objCorners(t.o)]:objRings(t.o))}" fill="var(--accent)" fill-opacity=".08" stroke="var(--accent)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>`;stage.title=dsNameN(t.o)+(hits.length>1?` · ${hits.length} objetos aquí`:'')})}
+function dsSelBox(){const sel=dsSelected();return sel.length?bboxOf(sel.map(o=>objCorners(o))):null}
+function dsScaleSel(sel,st,s,ax,ay){for(const [o,x,y,w,h] of st){o.x=ax+(x-ax)*s;o.y=ay+(y-ay)*s;o.w=Math.max(0.5,w*s);o.h=Math.max(0.5,h*s)}}
+function dsAfterScale(sel){for(const o of sel)if(o.shape==='ras'&&o.src)rasRender(o,true)}
 function dsDown(e){const p=svgPt(e);stage.setPointerCapture(e.pointerId);const O=OBJ();
-  const rh=e.target.closest('[data-rh]'),ro=e.target.closest('[data-roh]'),oi=e.target.closest('[data-oi]');
+  const rh=e.target.closest('[data-rh]'),ro=e.target.closest('[data-roh]'),oi=e.target.closest('[data-oi]'),gh=e.target.closest('[data-gh]'),gr=e.target.closest('[data-gr]');
+  if(gh||gr){const sel=dsSelected(),bb=dsSelBox();DS.drag={t:gh?'gscale':'grot',sel,bb,cx:bb.x0+bb.w/2,cy:bb.y0+bb.h/2,a0:Math.atan2(p[1]-(bb.y0+bb.h/2),p[0]-(bb.x0+bb.w/2)),st:sel.map(o=>[o,o.x,o.y,o.w,o.h,o.rot||0]),before:JSON.stringify(O)};return}
   if(rh){const o=O[+rh.dataset.rh];DS.drag={t:'resize',o,w0:o.w,h0:o.h,before:JSON.stringify(O)};return}
   if(ro){const o=O[+ro.dataset.roh];DS.drag={t:'rot',o,before:JSON.stringify(O)};return}
   const hits=dsHits(p);
@@ -1873,9 +1882,14 @@ function dsMove(e){const d=DS.drag;if(d.t==='pan'){const k=pxMM();S.panX=d.px+(e
   if(d.t==='resize'){const o=d.o,a=-(o.rot||0)*Math.PI/180,vx=p[0]-o.x,vy=p[1]-o.y;const lx=Math.abs(vx*Math.cos(a)-vy*Math.sin(a)),ly=Math.abs(vx*Math.sin(a)+vy*Math.cos(a));
     let prop=o.shape!=='lib';if(e.shiftKey)prop=!prop;
     if(prop){const s=Math.max(lx/(d.w0/2),ly/(d.h0/2));o.w=Math.max(1,d.w0*s);o.h=Math.max(1,d.h0*s)}else{o.w=Math.max(1,2*lx);o.h=Math.max(1,2*ly)}d.moved=true;renderOv();syncProps(true);return}
+  if(d.t==='gscale'){const b=d.bb;const ax=e.altKey?d.cx:b.x0,ay=e.altKey?d.cy:b.y0;const vx=b.x1-ax,vy=b.y1-ay;let s=((p[0]-ax)*vx+(p[1]-ay)*vy)/(vx*vx+vy*vy||1);s=Math.max(0.05,s);dsScaleSel(d.sel,d.st,s,ax,ay);d.s=s;d.moved=true;renderOv();syncProps(true);
+    $('bedWarn').hidden=false;$('bedWarn').textContent=`Escala ${Math.round(s*100)} % · ${fmtLen(b.w*s,1)} × ${fmtLen(b.h*s,1)} ${S.unit}${e.altKey?' (desde el centro)':''}`;return}
+  if(d.t==='grot'){let da=(Math.atan2(p[1]-d.cy,p[0]-d.cx)-d.a0)*180/Math.PI;if(e.shiftKey)da=Math.round(da/15)*15;const r=da*Math.PI/180,c=Math.cos(r),sn=Math.sin(r);
+    for(const [o,x,y,w,h,rot] of d.st){const dx=x-d.cx,dy=y-d.cy;o.x=d.cx+dx*c-dy*sn;o.y=d.cy+dx*sn+dy*c;let nr=rot+da;nr=((nr%360)+360)%360;if(nr>180)nr-=360;o.rot=nr}d.moved=true;renderOv();syncProps(true);return}
   if(d.t==='rot'){const o=d.o;let ang=Math.atan2(p[1]-o.y,p[0]-o.x)*180/Math.PI+90;if(e.shiftKey)ang=Math.round(ang/15)*15;o.rot=((ang%360)+360)%360;if(o.rot>180)o.rot-=360;d.moved=true;renderOv();syncProps(true);return}
   if(d.t==='marq'){DS.box=[Math.min(p[0],d.p0[0]),Math.min(p[1],d.p0[1]),Math.abs(p[0]-d.p0[0]),Math.abs(p[1]-d.p0[1])];renderOv()}}
 function dsUp(e){const d=DS.drag;DS.drag=null;stage.classList.remove('drag');if(!d)return;
+  if((d.t==='gscale'||d.t==='grot')&&d.moved){ED.undo.push({tab:'diseno',e:d.before});ED.redo=[];syncUndo();if(d.t==='gscale')dsAfterScale(d.sel);schedule();setView();return}
   if((d.t==='move'||d.t==='resize'||d.t==='rot')&&d.moved){ED.undo.push({tab:'diseno',e:d.before});ED.redo=[];syncUndo();if(d.t==='resize'&&d.o&&d.o.shape==='ras'&&d.o.src)rasRender(d.o,true);schedule();return}
   const lc=DS.lastClick;DS.lastClick=d.t==='move'&&!d.moved?{x:d.cx,y:d.cy,t:Date.now()}:null;
   if(d.t==='move'&&!d.moved&&d.wasSel&&lc&&Math.hypot(lc.x-d.cx,lc.y-d.cy)<6&&Date.now()-lc.t<5000&&d.hits.length>1&&DS.sel.size===1){const n=d.hits.length,i=d.hits.indexOf(d.pick),nx=d.hits[(i+1)%n];DS.sel=new Set([nx]);dsRefresh();
@@ -1976,7 +1990,8 @@ function dsProps(){const P=$('props'),O=OBJ(),sel=dsSelected(),st=(RESULT&&RESUL
     <label class="f">Rotación (°)<input id="dsr" inputmode="decimal" value="${+(one.rot||0).toFixed(1)}"></label><label class="f">Engrosar (mm)<input id="dsg" inputmode="decimal" value="${one.grow||0}"></label>
     <button class="tool" data-dsact="aspect">Proporción original</button>${one.grp?'<button class="tool" data-dsact="group">Seleccionar todo el grupo</button><button class="tool" data-dsact="sep">Separar</button>':''}`+aligns+
     `<button class="tool" data-dsact="fh">Espejar ↔</button><button class="tool" data-dsact="fv">Espejar ↕</button><button class="tool" data-dsact="dup">Duplicar</button><button class="tool" data-dsact="del">Eliminar</button>`}
-  else if(sel.length>1){h+=`<div class="status ok"><b>${sel.length} objetos</b><span>Muévelos juntos, únelos en una sola pieza o cámbiales el tipo a todos.</span></div>`+roles(sel.every(o=>o.role===sel[0].role)?sel[0].role:'')+
+  else if(sel.length>1){const sb=dsSelBox();h+=`<div class="status ok"><b>${sel.length} objetos</b><span>Muévelos juntos, escálalos con el cuadrado azul de la esquina (o escribe la medida), gíralos con el círculo de arriba, únelos en una sola pieza o cámbiales el tipo a todos.</span></div>`+roles(sel.every(o=>o.role===sel[0].role)?sel[0].role:'')+
+    `<label class="f">Ancho del conjunto (${S.unit})<input id="dsgw" inputmode="decimal" value="${fmtLen(sb.w,2)}"></label><label class="f">Alto del conjunto (${S.unit})<input id="dsgh" inputmode="decimal" value="${fmtLen(sb.h,2)}"></label><label class="f">Escala (%)<input id="dsgs" inputmode="decimal" value="100"></label>`+
     `<button class="tool primary" data-dsact="unir">Unir en una pieza</button><button class="tool" data-dsact="fh">Espejar ↔</button><button class="tool" data-dsact="fv">Espejar ↕</button>${sel.some(o=>o.grp)?'<button class="tool" data-dsact="sep">Separar</button>':''}`+aligns+`<button class="tool" data-dsact="dup">Duplicar</button><button class="tool" data-dsact="del">Eliminar</button>`}
   else h+=`<span class="sub">Toca un objeto en la vista o en la lista para editarlo. Shift+clic para elegir varios.</span>`;
   P.innerHTML=h;
@@ -2001,6 +2016,9 @@ $('props').addEventListener('input',e=>{if(S.tab!=='diseno')return;const one=dsS
   if(e.target.id==='dstext'){const hh=one.h;one.text=e.target.value;one.w=hh*textShape(one).aspect;schedule()}
   else if(e.target.id==='dsthr'){one.thr=+e.target.value;if(lastMs<250)schedule()}},true);
 $('props').addEventListener('change',e=>{if(S.tab!=='diseno')return;e.stopPropagation();const one=dsSelected()[0];if(!one)return;const id=e.target.id;
+  if(['dsgw','dsgh','dsgs'].includes(id)){const sel=dsSelected(),bb=dsSelBox();const v=parseFloat(String(e.target.value).replace(',','.'));if(!(v>0)){dsRefresh();return}
+    const s=id==='dsgs'?v/100:id==='dsgw'?v*uf()/bb.w:v*uf()/bb.h;if(!(s>0.01&&s<100)){toast('Escala fuera de rango');dsRefresh();return}snap();const cx=bb.x0+bb.w/2,cy=bb.y0+bb.h/2;
+    dsScaleSel(sel,sel.map(o=>[o,o.x,o.y,o.w,o.h]),s,cx,cy);dsAfterScale(sel);document.getElementById('props').dataset.ds='';schedule();toast(`Escalado ${Math.round(s*100)} %`);return}
   if(id==='dstext')return;if(id==='dsthr'){snap();schedule();return}if(id==='dsinv'){snap();one.inv=e.target.checked;schedule();return}if(one&&one.shape==='ras'&&['dsalgo','dsdot','dsang','dscon','dsbri','dsrinv'].includes(id)){const ph=one.ph=Object.assign({},one.ph||{});
     if(id==='dsalgo')ph.algo=e.target.value;else if(id==='dsrinv')ph.invert=e.target.checked;else{const v=parseFloat(String(e.target.value).replace(',','.'));const lim={dsdot:[0.03,1,'dot'],dsang:[-90,90,'angle'],dscon:[-100,100,'contrast'],dsbri:[-100,100,'bright']}[id];
       if(!(v>=lim[0]&&v<=lim[1])){toast(`Usa un valor entre ${lim[0]} y ${lim[1]}`);e.target.value=ph[lim[2]]??'';return}ph[lim[2]]=v}

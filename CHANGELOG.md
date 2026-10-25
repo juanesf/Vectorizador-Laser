@@ -1,5 +1,10 @@
 # Cambios
 
+## 1.2.2 — 2026-10-25
+
+- Diseño libre: con dos o más objetos seleccionados aparece un recuadro del conjunto. Se escalan todos juntos con el cuadrado de la esquina (Alt = desde el centro) y se giran juntos con el círculo de arriba (Shift = de 15 en 15°).
+- En el panel se puede escribir el ancho o el alto del conjunto, o la escala en %. Las tramas de foto se recalculan para mantener el punto.
+
 ## 1.2.1 — 2026-10-25
 
 - Diseño libre: las tramas de foto guardan la foto original y aceptan todos los tipos de trama (Floyd–Steinberg, Atkinson, Jarvis, Stucki, Sierra, Bayer, puntos, líneas, umbral, boceto y escala de grises). También se ajustan el punto del láser, el ángulo, el contraste, el brillo y la opción de invertir.
