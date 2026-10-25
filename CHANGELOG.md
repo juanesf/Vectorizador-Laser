@@ -1,5 +1,16 @@
 # Cambios
 
+## 1.3.0 — 2026-10-25
+
+- Nueva pestaña **Decoradores** con generadores paramétricos de diseño propio:
+  - **Reloj de pared:** números del 1 al 12, 12·3·6·9, romanos, solo marcas o teclado de piano. Los números se graban, se calan o salen aparte para pegar. Incluye agujero para el mecanismo, aro y agujero para colgar.
+  - **Topper para torta:** una o dos líneas con tipografía a elección, palitos y adornos. Junta las líneas y agrega puentes automáticos para que salga en una sola pieza.
+  - **Mandala / rosetón:** número de pétalos, capas, forma, pétalos calados; en una pieza o en capas para pegar (3D).
+  - **Mariposas y flores:** set de piezas de distintos tamaños para decorar paredes, con línea para doblar las alas.
+  - **Llaveros:** con nombre, en rectángulo, círculo, corazón o contorno del texto, y varias copias.
+  - Botón “Editar en Diseño libre” para seguir editando cualquier decorador.
+- Enlace a 3axis.co (archivos de corte gratuitos) en Decoradores y en el panel de íconos de Diseño libre.
+
 ## 1.2.2 — 2026-10-25
 
 - Diseño libre: con dos o más objetos seleccionados aparece un recuadro del conjunto. Se escalan todos juntos con el cuadrado de la esquina (Alt = desde el centro) y se giran juntos con el círculo de arriba (Shift = de 15 en 15°).

@@ -1,5 +1,5 @@
 <!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><!--
-  Vectorizador Láser v1.2.2
+  Vectorizador Láser v1.3.0
   Copyright (C) 2026 Cecilia Vivot <ceciliavivot@gmail.com> y Juan Sanchez <juanesf91@gmail.com>
   Co-asistido por Claude (Anthropic).
   Este programa es software libre: puedes redistribuirlo y/o modificarlo bajo los términos de la
@@ -429,6 +429,65 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
       <label class="tog"><input type="checkbox" id="bxLab" checked> Grabar el nombre de cada pieza</label>
     </section>
 
+    <!-- DECORADORES -->
+    <section class="sec" data-for="deco">
+      <div class="lbl">Decorador</div>
+      <div class="chips bxtypes" id="dcPick"><button class="chip" data-v="reloj">Reloj de pared</button><button class="chip" data-v="topper">Topper para torta</button><button class="chip" data-v="mandala">Mandala / rosetón</button><button class="chip" data-v="set">Mariposas y flores</button><button class="chip" data-v="llavero">Llaveros</button></div>
+      <div class="sub" id="dcDesc"></div>
+    </section>
+    <section class="sec" data-for="deco" data-dc="reloj">
+      <div class="lbl">Reloj</div>
+      <div id="ctlRlD"></div>
+      <div class="sub">Estilo</div>
+      <div class="chips" id="rlStyle"><button class="chip" data-v="numeros">1 al 12</button><button class="chip" data-v="cuatro">12 · 3 · 6 · 9</button><button class="chip" data-v="romanos">Romanos</button><button class="chip" data-v="marcas">Solo marcas</button><button class="chip" data-v="piano">Piano</button></div>
+      <div class="f">Tipografía de los números<div class="dd" id="rlFont"></div></div>
+      <div id="ctlRlNum"></div>
+      <div class="sub">Los números se…</div>
+      <div class="chips" id="rlMode"><button class="chip" data-v="grabado">Graban</button><button class="chip" data-v="calado">Calan (huecos)</button><button class="chip" data-v="pegar">Cortan aparte para pegar</button></div>
+      <div id="ctlRlHole"></div><div id="ctlRlRim"></div>
+      <label class="tog"><input type="checkbox" id="rlHang"> Agujero para colgar</label>
+      <div class="remind"><b>Mecanismo</b><br>Los mecanismos de reloj de cuarzo comunes usan un eje de 7,5 a 8 mm y un material de hasta 5–6 mm de espesor. Mide el tuyo antes de cortar.</div>
+    </section>
+    <section class="sec" data-for="deco" data-dc="topper">
+      <div class="lbl">Topper</div>
+      <label class="sub" for="tpL1">Primera línea</label><input class="txt" id="tpL1" maxlength="30">
+      <div class="f">Tipografía<div class="dd" id="tpFont1"></div></div>
+      <label class="sub" for="tpL2">Segunda línea (opcional)</label><input class="txt" id="tpL2" maxlength="30">
+      <div class="f">Tipografía<div class="dd" id="tpFont2"></div></div>
+      <div id="ctlTpW"></div><div id="ctlTpWeld"></div><div id="ctlTpGap"></div><label class="tog"><input type="checkbox" id="tpJoin"> Juntar las líneas automáticamente</label>
+      <div class="sub">Palitos</div><div class="chips g3" id="tpStakes"><button class="chip" data-v="1">1 palito</button><button class="chip" data-v="2">2 palitos</button></div>
+      <div id="ctlTpLen"></div><div id="ctlTpSw"></div>
+      <div class="sub">Adorno a los lados</div><div class="chips" id="tpDeco"><button class="chip" data-v="ninguno">Ninguno</button><button class="chip" data-v="st5">Estrellas</button><button class="chip" data-v="corazon">Corazones</button><button class="chip" data-v="mariposa">Mariposas</button><button class="chip" data-v="flor">Flores</button></div>
+    </section>
+    <section class="sec" data-for="deco" data-dc="mandala">
+      <div class="lbl">Mandala</div>
+      <div id="ctlMdD"></div><div id="ctlMdN"></div><div id="ctlMdL"></div>
+      <div class="sub">Forma del pétalo</div><div class="chips g3" id="mdShape"><button class="chip" data-v="gota">Gota</button><button class="chip" data-v="punta">Loto</button><button class="chip" data-v="redondo">Redondo</button></div>
+      <label class="tog"><input type="checkbox" id="mdLace"> Pétalos calados (encaje)</label><div id="ctlMdLine"></div><div id="ctlMdHole"></div>
+      <div class="sub">Salida</div><div class="chips g3" id="mdMode"><button class="chip" data-v="una">Una sola pieza</button><button class="chip" data-v="capas">Capas para pegar (3D)</button></div>
+    </section>
+    <section class="sec" data-for="deco" data-dc="set">
+      <div class="lbl">Set para pared</div>
+      <div class="chips" id="stKind"><button class="chip" data-v="mix">Mezcla</button><button class="chip" data-v="mariposa">Mariposas</button><button class="chip" data-v="flores">Flores</button><button class="chip" data-v="corazon">Corazones</button><button class="chip" data-v="estrella">Estrellas</button></div>
+      <div id="ctlStN"></div><div id="ctlStMin"></div><div id="ctlStMax"></div>
+      <label class="tog"><input type="checkbox" id="stFold"> Línea grabada para doblar las alas (3D)</label>
+      <label class="tog"><input type="checkbox" id="stCenter"> Centro grabado en las flores</label>
+      <button class="btn" id="stShuffle" style="align-self:flex-start">Mezclar tamaños</button>
+    </section>
+    <section class="sec" data-for="deco" data-dc="llavero">
+      <div class="lbl">Llavero</div>
+      <label class="sub" for="kyText">Texto</label><input class="txt" id="kyText" maxlength="20">
+      <div class="f">Tipografía<div class="dd" id="kyFont"></div></div>
+      <div class="sub">Forma</div><div class="chips" id="kyShape"><button class="chip" data-v="rect">Rectángulo</button><button class="chip" data-v="circulo">Círculo</button><button class="chip" data-v="corazon">Corazón</button><button class="chip" data-v="texto">Contorno del texto</button></div>
+      <div id="ctlKyW" data-ky="rect circulo corazon"></div><div id="ctlKyH" data-ky="rect circulo corazon"></div><div id="ctlKyB" data-ky="texto"></div><div id="ctlKyHole"></div>
+      <div class="sub">Texto</div><div class="chips g3" id="kyMode"><button class="chip" data-v="grabado">Grabado</button><button class="chip" data-v="calado">Calado</button></div>
+      <div id="ctlKyN"></div>
+    </section>
+    <section class="sec" data-for="deco">
+      <div class="lbl">Más diseños listos</div>
+      <div class="sub">Sitios con archivos de corte gratuitos, como <a href="https://3axis.co" target="_blank" rel="noopener">3axis.co</a>. Descarga el SVG y súbelo en <b>Diseño libre → Íconos y SVG → Subir archivo SVG</b> para editarlo. Revisa la licencia de cada archivo antes de vender lo que hagas con él.</div>
+    </section>
+
     <!-- FOTO A TRAMA -->
     <section class="sec" data-for="foto">
       <div class="lbl">Foto</div>
@@ -615,6 +674,7 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
         <button class="tab" role="tab" data-tab="imagen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m3 17 5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.6"/></svg>Imagen</button>
         <button class="tab" role="tab" data-tab="alcancia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4h7v12h5v4H6z"/><path d="M9 2h2"/><circle cx="10" cy="17" r="1.6"/></svg>Alcancía por capas</button>
         <button class="tab" role="tab" data-tab="diseno"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15l3-4 2 3 2-2 3 3"/><path d="M7 9h4"/></svg>Diseño libre</button>
+        <button class="tab" role="tab" data-tab="deco"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/><path d="M12 2v1.5M12 20.5V22M2 12h1.5M20.5 12H22"/></svg>Decoradores</button>
         <button class="tab" role="tab" data-tab="foto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Foto a trama</button>
         <button class="tab" role="tab" data-tab="herramientas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>Herramientas</button>
       </div>
@@ -8317,7 +8377,7 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
 })();
 </script>
 <dialog id="aboutDlg" class="about">
-  <h2>Vectorizador Láser <small>v1.2.2</small></h2>
+  <h2>Vectorizador Láser <small>v1.3.0</small></h2>
   <p>Creado por <b>Cecilia Vivot</b> y <b>Juan Sanchez</b>. Co-asistido por Claude (Anthropic).</p>
   <p>Software libre bajo licencia <b>GPL-3.0 o posterior</b>: puedes usarlo, copiarlo, modificarlo y compartirlo, siempre manteniendo la misma licencia y entregando el código. Lo que fabriques con el programa (piezas cortadas o grabadas) es tuyo y puedes venderlo sin restricciones.</p>
   <p class="sub">Incluye: opentype.js (MIT), Clipper (Boost), tipografías de Google Fonts (OFL / Apache 2.0), íconos Fluent Emoji High Contrast, Phosphor y Tabler (MIT) y Material Design Icons (Apache 2.0). El archivo .rd usa la codificación documentada por meerk40t (MIT). Ideas de cajas inspiradas en boxes.py de Florian Festi.</p>
@@ -8332,24 +8392,25 @@ const ICON_DATA = {"fluent-emoji-high-contrast": "H4sIAAAAAAAC/+y9W48cSZat91cCdV
 /* ---------- estado ---------- */
 const UNITS={mm:1,cm:10,in:25.4};
 const S={
+  deco:{tool:'reloj',reloj:{d:300,style:'cuatro',font:'bebas',num:9,mode:'grabado',hole:8,rim:0,hang:true},topper:{l1:'Feliz Cumple',l2:'Sofía',font1:'pacifico',font2:'pacifico',w:150,gap:0,autoJoin:true,weld:0.8,stakes:2,len:80,sw:6,deco:'st5'},mandala:{d:200,n:12,layers:3,shape:'gota',lace:true,line:2.5,hole:0,mode:'una'},set:{kind:'mix',count:12,min:40,max:90,fold:true,center:true,seed:1},llavero:{text:'Sofía',font:'pacifico',shape:'rect',w:60,h:28,hole:4,mode:'grabado',border:3,copies:1}},
   bed:{w:600,h:400},grid:50,
   laser:{cp:60,cv:15,cn:1,ep:20,ev:300,ei:0.1,origin:'current'},
   tab:'letras', letra:'A', numero:'7', palabras:'Hola',
-  font:'alfa', unit:'mm', size:{letras:101.6,numeros:101.6,palabras:300,imagen:200,alcancia:200,diseno:300,foto:150,herramientas:100}, fitT:{letras:'h',numeros:'h',palabras:'w',imagen:'w',alcancia:'h',diseno:'w',foto:'w',herramientas:'w'},
+  font:'alfa', unit:'mm', size:{letras:101.6,numeros:101.6,palabras:300,imagen:200,alcancia:200,diseno:300,foto:150,herramientas:100,deco:100}, fitT:{letras:'h',numeros:'h',palabras:'w',imagen:'w',alcancia:'h',diseno:'w',foto:'w',herramientas:'w',deco:'w'},
   box:{letterFont:'alfa',text:'L',manual:false,view:'armado',spacers:2,acr:true,front:'outline',nameOn:false,name:'Luna',nameFont:'pacifico',nameW:85,base:true,border:8,slotW:30,mdf:3,acrT:3},
   spacing:0, lineGap:1.05, align:'center', weld:true,
   style:'pattern', pattern:'rattan_redondo', cell:20, hole:100, rot:0, border:2.5, minA:0.5, fullOnly:false,
   mode:'cut', baseOff:4, kerf:0,
   img:{thr:128,invert:false,res:700,blur:1,speck:12,simp:0.8,smooth:1},
   incGuide:false, zoom:1, panX:0, panY:0,
-  edits:{letras:[],numeros:[],palabras:[],imagen:[],alcancia:[],diseno:[],foto:[],herramientas:[]},
+  edits:{letras:[],numeros:[],palabras:[],imagen:[],alcancia:[],diseno:[],foto:[],herramientas:[],deco:[]},
   tools:{tool:'pruebas',bg:{tol:28,feather:1,main:true,invert:false,fillHoles:true,useBorder:true,seeds:[],mode:'silueta',w:100,margin:3},crop:{shape:'corazon',w:80,zoom:1,ox:0,oy:0,margin:0},
     test:{kind:'pv',mode:'grabado',rows:5,cols:5,pmin:10,pmax:50,vmin:100,vmax:500,cell:10,gap:3,title:'Madera',plate:false},focus:{kind:'rampa',len:150,steps:7,step:0.5},kerf:{n:10,w:5,h:20},
     box:{type:'simple',w:100,d:80,h:60,inner:false,t:3,f:10,kerf:0.1,lid:true,labels:true,text:'',textFont:'pacifico',rail:5,clear:0.3,bend:12,nx:3,ny:2,radius:20,flange:4,flexD:2,tabSp:35,lidH:40,roofH:35,hole:32,over:8,coinL:32,coinW:4,plug:50}},
   photo:{w:150,dot:0.1,algo:'atk',serp:true,bright:0,contrast:10,gamma:1,sharp:0.5,white:256,invert:false,cell:6,angle:45,edge:30,vcell:3,vmax:100,vmin:0.2,vgrid:'hex',vuse:'eng',material:'madera',speed:300,view:'result'},
   design:{W:300,H:200,seeded:false},
   clean:{letras:{grow:0,minPiece:0,minHole:0,keepMain:false},numeros:{grow:0,minPiece:0,minHole:0,keepMain:false},
-         palabras:{grow:0,minPiece:0,minHole:0,keepMain:false},imagen:{grow:0,minPiece:2,minHole:0,keepMain:false},alcancia:{grow:0,minPiece:0,minHole:0,keepMain:false},diseno:{grow:0,minPiece:0,minHole:0,keepMain:false},foto:{grow:0,minPiece:0,minHole:0,keepMain:false},herramientas:{grow:0,minPiece:0,minHole:0,keepMain:false}}
+         palabras:{grow:0,minPiece:0,minHole:0,keepMain:false},imagen:{grow:0,minPiece:2,minHole:0,keepMain:false},alcancia:{grow:0,minPiece:0,minHole:0,keepMain:false},diseno:{grow:0,minPiece:0,minHole:0,keepMain:false},foto:{grow:0,minPiece:0,minHole:0,keepMain:false},herramientas:{grow:0,minPiece:0,minHole:0,keepMain:false},deco:{grow:0,minPiece:0,minHole:0,keepMain:false}}
 };
 const $=id=>document.getElementById(id);
 const FONTS={}; // key -> {name, font}
@@ -9026,7 +9087,7 @@ function renderOv(){
   g.innerHTML=h;
 }
 function updateStats(){
-  const t=S.tab;if(t==='herramientas')return tlStats();if(t==='foto')return phStats();if(t==='diseno')return dsStats();const lbl={letras:'Letra',numeros:'Número',palabras:'Texto',imagen:'Imagen',alcancia:'Alcancía'}[t];
+  const t=S.tab;if(t==='deco')return dcStats();if(t==='herramientas')return tlStats();if(t==='foto')return phStats();if(t==='diseno')return dsStats();const lbl={letras:'Letra',numeros:'Número',palabras:'Texto',imagen:'Imagen',alcancia:'Alcancía'}[t];
   $('stAl').textContent=lbl;
   const val=t==='imagen'?IMG.name:t==='alcancia'?(S.box.name.trim()||S.box.text):currentText().replace(/\n/g,' ');
   $('stA').textContent=val.length>14?val.slice(0,13)+'…':(val||'—');
@@ -9045,6 +9106,7 @@ function updateStats(){
 const styleName=()=>({solid:'Entera',outline:'Solo bordes',pattern:'Con patrón'})[S.style];
 const modeName=()=>({cut:'Corte',engrave:'Grabado',base:'Base + grabado'})[S.mode];
 function suggestName(){const slug=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-|-$/g,'').toLowerCase().slice(0,24)||'x';
+  if(S.tab==='deco'){const T=DC();return ({reloj:'reloj-'+T.reloj.style+'-'+Math.round(T.reloj.d),topper:'topper-'+slug(T.topper.l2||T.topper.l1||'torta'),mandala:'mandala-'+T.mandala.n+'p',set:'set-'+T.set.kind,llavero:'llavero-'+slug(T.llavero.text||'nombre')})[T.tool]}
   if(S.tab==='herramientas')return ({fondo:'silueta',recorte:'recorte',perfiles:'perfiles',pruebas:'prueba-'+S.tools.test.kind,cajas:'caja'})[S.tools.tool]+'-'+slug(S.tools.tool==='pruebas'?S.tools.test.title||'material':S.tools.tool==='cajas'?`${S.tools.box.type}-${Math.round(S.tools.box.w)}x${Math.round(S.tools.box.d)}x${Math.round(S.tools.box.h)}`:(TLIMG.name||'foto').replace(/\.[^.]+$/,''));
   if(S.tab==='foto')return 'foto-'+slug((PHOTO.name||'foto').replace(/\.[^.]+$/,''))+'-'+S.photo.algo;
   if(S.tab==='diseno'){const t=S.edits.diseno.find(o=>o.shape==='text');return 'cartel-'+(t?slug(t.text):'diseno')}
@@ -9060,7 +9122,7 @@ function baseKey(){return JSON.stringify(S.tab==='imagen'?['i',IMG.ver,S.img,S.s
   [S.tab,currentText(),curFont(),S.size[S.tab],S.fitT[S.tab],S.tab==='palabras'?[S.spacing,S.lineGap,S.align,S.weld]:0])}
 function compute(){
   const tc=performance.now();
-  try{if(S.tab==='herramientas'){RESULT=buildTools()}else if(S.tab==='foto'){RESULT=buildPhoto()}else if(S.tab==='diseno'){RESULT=buildDesign()}else{const k=baseKey();if(k!==BASE.key){BASE={key:k,v:S.tab==='imagen'?buildImage():buildText()}}
+  try{if(S.tab==='deco'){RESULT=buildDeco()}else if(S.tab==='herramientas'){RESULT=buildTools()}else if(S.tab==='foto'){RESULT=buildPhoto()}else if(S.tab==='diseno'){RESULT=buildDesign()}else{const k=baseKey();if(k!==BASE.key){BASE={key:k,v:S.tab==='imagen'?buildImage():buildText()}}
     RESULT=BASE.v?(S.tab==='alcancia'?buildBox(BASE.v.letter):finish(BASE.v.letter,BASE.v.allow)):null;if(S.tab==='alcancia')syncBoxInfo()}}
   catch(e){console.error(e);RESULT=null;toast('No se pudo generar: '+e.message)}
   if(ED.sel>=EDS().length)ED.sel=-1;
@@ -9747,7 +9809,7 @@ function drawIconPanel(){const P=$('iconPanel');const ds=S.tab==='diseno';
   <div class="sub" id="icMsg">Escribe una palabra o toca un tema.</div><div id="icRes" class="shgrid" style="grid-template-columns:repeat(auto-fill,minmax(44px,1fr));max-height:260px;overflow:auto"></div>
   <div class="shcat">Desde svgrepo.com u otra página</div>
   <div class="sub">Busca el dibujo, descárgalo como <b>SVG</b> y súbelo aquí. También puedes pegar el código SVG.</div>
-  <div class="tools"><a class="tool" href="https://www.svgrepo.com/" target="_blank" rel="noopener">Abrir svgrepo.com ↗</a><label class="tool">Subir archivo SVG<input type="file" id="icFile" accept=".svg,image/svg+xml" hidden></label></div>
+  <div class="tools"><a class="tool" href="https://www.svgrepo.com/" target="_blank" rel="noopener">Abrir svgrepo.com ↗</a><a class="tool" href="https://3axis.co/" target="_blank" rel="noopener">Abrir 3axis.co ↗</a><label class="tool">Subir archivo SVG<input type="file" id="icFile" accept=".svg,image/svg+xml" hidden></label></div>
   <textarea id="icPaste" placeholder="Pega aquí el código &lt;svg&gt;…&lt;/svg&gt;" style="min-height:54px;font-size:12px;font-family:var(--mono)"></textarea><button class="tool" id="icPasteGo" style="align-self:flex-start">Usar código pegado</button>
   <div class="sub" style="font-size:11.5px"><b>Solo colecciones libres para uso comercial</b>, sin obligación de mencionar al autor en tus productos: Fluent Emoji contorno (MIT), Material Design Icons (Apache 2.0), Phosphor (MIT) y Tabler (MIT). Las tipografías incluidas son Google Fonts con licencia OFL o Apache. En svgrepo.com, usa solo dibujos con licencia CC0, Public Domain o MIT (se indica en cada página).</div>`}
 // colecciones en línea con licencia permisiva (MIT, Apache 2.0, ISC) que permiten vender sin atribución en el producto
@@ -10399,10 +10461,126 @@ function tlStats(){const R=RESULT,T=TT();$('stAl').textContent='Herramientas';$(
 
 $('phOutDel').onclick=()=>{PHOTO.outline=null;phSync();schedule()};
 /* pestañas */
+/* ---------- decoradores: relojes, toppers, mandalas, mariposas/flores y llaveros (diseños propios, paramétricos) ---------- */
+const DC=()=>S.deco;
+const DC_NAMES={reloj:'Reloj de pared',topper:'Topper para torta',mandala:'Mandala / rosetón',set:'Mariposas y flores',llavero:'Llaveros'};
+function dcFont(k){return FONTS[k]?k:S.font}
+function dcText(str,h,font){const t=tlText(str,h,dcFont(font));return t}
+function dcBase(){const R=tlBase(10,10);R.deco=true;return R}
+function dcFinish(R,cut,eng,open){const all=[...cut,...eng,...(open||[])];if(!all.length){R.empty=true;R.bgText='Nada que mostrar';return tlFinish(R)}
+  const bb=bboxOf(all);const m=3;const sh=rs=>mv(rs,-bb.x0+m,-bb.y0+m);R.cut=sh(cut);R.engrave=sh(eng);R.open=sh(open||[]);R.W=bb.w+2*m;R.H=bb.h+2*m;
+  if(S.kerf>0&&R.cut.length)R.cut=fromC(offset(union(toC(R.cut),CL.PolyFillType.pftEvenOdd),S.kerf/2));R.info.pieces=toPieces(union(toC(R.cut),CL.PolyFillType.pftEvenOdd),0).length;return tlFinish(R)}
+const ring=(r,cx=0,cy=0)=>circAt(cx,cy,r);
+function outlineEng(rs,w){const c=union(toC(rs));return fromC(diff(offset(c,w/2),offset(c,-w/2)))}
+/* --- reloj --- */
+const ROMAN=['XII','I','II','III','IV','V','VI','VII','VIII','IX','X','XI'];
+function dcReloj(){const C=DC().reloj,R=dcBase(),r=C.d/2,warn=R.warn;let base=toC([ring(r)]);const holes=[],eng=[],extra=[];
+  holes.push(ring(C.hole/2));
+  const nh=C.num/100*C.d;const rn=r-Math.max(4,r*0.05)-nh*0.6-(C.rim>0?C.rim+2:0);if(C.hang)holes.push(ring(2.5,0,-(C.style==='marcas'?r-r*0.25:rn-nh*0.75-6)));
+  let hours=[...Array(12).keys()];if(C.style==='cuatro'||C.style==='piano')hours=[0,3,6,9];if(C.style==='piano')hours=[0,3,9];if(C.style==='marcas')hours=[];
+  const labels=C.style==='romanos'?ROMAN:['12','1','2','3','4','5','6','7','8','9','10','11'];
+  const numRings=[];
+  for(const hh of hours){const a=hh/12*TAU-Math.PI/2;const t=dcText(labels[hh],nh,C.font);if(!t.rings.length)continue;const cx=Math.cos(a)*rn,cy=Math.sin(a)*rn;
+    numRings.push(...mv(t.rings,cx-t.w/2,cy-t.h/2))}
+  // puntos / marcas en las horas sin número
+  const marks=[];for(let hh=0;hh<12;hh++){if(hours.includes(hh))continue;const a=hh/12*TAU-Math.PI/2;
+    if(C.style==='marcas'){const big=hh%3===0,L=big?r*0.12:r*0.07,W=big?Math.max(3,r*0.025):Math.max(2,r*0.014);const rr=r-Math.max(4,r*0.05)-(C.rim>0?C.rim+2:0)-L/2;marks.push(place(rectR(-W/2,-L/2,W,L),Math.cos(a)*rr,Math.sin(a)*rr,a+Math.PI/2))}
+    else if(C.style!=='numeros'&&C.style!=='romanos'&&!(C.style==='piano'&&Math.sin(a)*rn>r*0.15))marks.push(ring(Math.max(2,nh*0.12),Math.cos(a)*rn,Math.sin(a)*rn))}
+  if(C.style==='piano'){const y0=r*0.22,ri=r-Math.max(5,r*0.06)-(C.rim>0?C.rim+2:0);const keys=14,kw=(2*ri)/keys,sw=Math.max(1.2,kw*0.12);const band=[];
+    for(let i=1;i<keys;i++){const x=-ri+i*kw;band.push(rectR(x-sw/2,y0,sw,r))}
+    const blackAfter=[0,1,3,4,5];for(let o=0;o<2;o++)for(const b of blackAfter){const i=o*7+b+1;if(i>=keys)continue;const x=-ri+i*kw;band.push(rectR(x-kw*0.32,y0,kw*0.64,(ri-y0)*0.55))}
+    const clipC=toC([ring(ri)]);holes.push(...fromC(inter(union(toC(band)),clipC)))}
+  const mode=C.mode;const decor=[...numRings,...marks];
+  if(mode==='grabado')eng.push(...decor);else if(mode==='calado')holes.push(...decor);
+  else{eng.push(...outlineEng(decor,0.3));extra.push(...decor)}
+  if(C.rim>0)eng.push(...fromC(diff(toC([ring(r-2)]),toC([ring(r-2-C.rim)]))));
+  let dial=diff(base,union(toC(holes)));const cut=fromC(dial);
+  if(mode==='pegar'&&extra.length){const bb=bboxOf(cut);const parts=fromC(union(toC(extra)));let x=bb.x0,y=bb.y1+8,rowH=0;
+    const pieces=toPieces(union(toC(parts)),0).map(p=>fromC([p.outer,...p.holes]));for(const pc of pieces){const b=bboxOf(pc);if(x+b.w>bb.x1){x=bb.x0;y+=rowH+4;rowH=0}cut.push(...mv(pc,x-b.x0,y-b.y0));x+=b.w+4;rowH=Math.max(rowH,b.h)}}
+  if(C.hole<5)warn.push('El agujero central es muy chico para un mecanismo de reloj (normalmente 7,5–8 mm).');
+  if(mode==='calado'&&C.style!=='marcas')warn.push('Con números calados, los centros de 0, 4, 6, 8 y 9 se caen: usa una tipografía esténcil o el modo “Piezas para pegar”.');
+  R.decoInfo=`Reloj de ${fmtLen(C.d,0)} ${S.unit} · agujero central ${String(C.hole).replace('.',',')} mm para el eje del mecanismo.`;
+  return dcFinish(R,cut,eng)}
+/* --- topper para torta --- */
+function dcTopper(){const T=DC().topper,R=dcBase(),warn=R.warn;const W=T.w;
+  const lines=[T.l1,T.l2].map(s=>(s||'').trim()).filter(Boolean);if(!lines.length){R.empty=true;R.bgText='Escribe un texto';return tlFinish(R)}
+  const L=lines.map((s,i)=>{const font=i?T.font2:T.font1;let t=dcText(s,40,font);const k=(i?W*0.8:W)/t.w;t=dcText(s,40*k,font);return {t,x:(W-t.w)/2}});
+  const weld=rs=>{let u=union(toC(rs),CL.PolyFillType.pftNonZero);return T.weld>0?offset(u,T.weld):u};
+  let y=0;let parts=mv(L[0].t.rings,L[0].x,0);y=L[0].t.h;
+  for(let i=1;i<L.length;i++){let g=T.gap,ok=false;const prev=weld(parts);for(let it=0;it<40;it++){const cand=mv(L[i].t.rings,L[i].x,y+g);if(inter(prev,weld(cand)).length){ok=true;break}if(!T.autoJoin)break;g-=1;if(g<-L[i].t.h*0.6)break}
+    parts=parts.concat(mv(L[i].t.rings,L[i].x,y+g));if(!ok&&T.autoJoin)warn.push('Las líneas no se tocan: acerca el espacio entre líneas o usa otra tipografía.');y+=g+L[i].t.h}
+  let shape=weld(parts);
+  const last=L[L.length-1],ly0=y-last.t.h;const lastP=toPieces(toC(mv(last.t.rings,last.x,ly0)),0).map(p=>bboxOf(fromC([p.outer])));const bots=lastP.map(b=>b.y1).sort((a,b)=>a-b);const base=bots.length?bots[Math.floor(bots.length/2)]:y;
+  const bbT=bboxOf(fromC(shape));const sw=T.sw,barY=base-sw*0.55;const n=T.stakes;const xs=n===1?[W/2]:[W*0.27,W*0.73];
+  const bx0=Math.min(last.x+last.t.w*0.04,xs[0]-sw/2),bx1=Math.max(last.x+last.t.w*0.96,xs[xs.length-1]+sw/2);const extra=[rectR(bx0,barY,bx1-bx0,sw)];
+  const bottom=Math.max(barY+sw,bbT.y1);for(const x of xs)extra.push([[x-sw/2,barY],[x+sw/2,barY],[x+sw/2,bottom+T.len-sw],[x,bottom+T.len],[x-sw/2,bottom+T.len-sw]]);
+  if(T.deco!=='ninguno'&&LIB[T.deco]){const b1=bboxOf(mv(L[0].t.rings,L[0].x,0));const ds=b1.h*0.85;const g=libShape(T.deco).rings;for(const sx of [b1.x0-ds*0.3,b1.x1+ds*0.3])extra.push(...g.map(q=>q.map(p=>[sx+p[0]*ds,b1.y0+b1.h*0.5+p[1]*ds])))}
+  shape=union([...shape,...toC(extra)]);
+  const skip=new Set();for(let it=0;it<16;it++){const ps=toPieces(shape,0);if(ps.length<2)break;ps.sort((a,b)=>b.area-a.area);const main=[ps[0].outer,...ps[0].holes];const lone=ps.slice(1).find(p=>!skip.has(Math.round(p.bb.x0)+','+Math.round(p.bb.y0)));if(!lone)break;
+    const b=lone.bb,bw=Math.max(1.6,T.weld*2+0.8);let best=null;const lp=[lone.outer,...lone.holes];const tryBr=(r,L)=>{if(best&&L>=best.L)return;const c=toC([r]);if(inter(c,main).length&&inter(c,lp).length)best={c,L}};
+    for(let L=1;L<=61;L+=2){for(const f of [0.5,0.3,0.7,0.15,0.85]){const x=b.x0+b.w*f;tryBr(rectR(x-bw/2,b.y1-1.5,bw,L),L);tryBr(rectR(x-bw/2,b.y0-L+1.5,bw,L),L)}
+      for(const f of [0.6,0.5,0.75,0.35]){const y=b.y0+b.h*f;tryBr(rectR(b.x1-1.5,y-bw/2,L,bw),L);tryBr(rectR(b.x0-L+1.5,y-bw/2,L,bw),L)}if(best)break}
+    if(best)shape=union([...shape,...best.c]);else skip.add(Math.round(b.x0)+','+Math.round(b.y0))}
+  const pcs=toPieces(shape,0).length;if(pcs>1)warn.push(`Hay ${pcs} piezas sueltas: sube el “grosor de unión” o usa una tipografía cursiva que se toque.`);
+  if(T.sw<4)warn.push('Palitos de menos de 4 mm se quiebran al clavarlos en la torta.');
+  R.decoInfo=`Topper de ${fmtLen(W,0)} ${S.unit} de ancho con ${n} palito${n>1?'s':''} de ${fmtLen(T.len,0)} ${S.unit}. Usa acrílico o MDF de 3 mm; para alimentos, acrílico o madera sellada.`;
+  return dcFinish(R,fromC(shape),[])}
+/* --- mandala --- */
+function keepMain(paths){const ps=toPieces(paths,0);if(ps.length<2)return paths;ps.sort((a,b)=>b.area-a.area);const m=ps[0];return [m.outer,...m.holes]}
+function petal(ri,ro,ang,w,kind){const pts=[],n=36;const half=t=>kind==='redondo'?Math.sqrt(Math.max(0,1-(2*t-1)**2)):kind==='punta'?Math.pow(Math.sin(Math.PI*Math.min(1,t*1.05)),1.6):Math.pow(Math.sin(Math.PI*t),0.8)*(1-0.25*t);
+  for(let i=0;i<=n;i++){const t=i/n,r=ri+(ro-ri)*t,a=ang+w/2*half(t);pts.push([Math.cos(a)*r,Math.sin(a)*r])}
+  for(let i=n;i>=0;i--){const t=i/n,r=ri+(ro-ri)*t,a=ang-w/2*half(t);pts.push([Math.cos(a)*r,Math.sin(a)*r])}return pts}
+function dcMandala(){const M=DC().mandala,R=dcBase();const Rr=M.d/2,N=Math.round(M.n),L=Math.round(M.layers),lw=M.line;const layers=[];
+  for(let j=0;j<L;j++){const ro=Rr*(1-j*0.62/L),ri=ro*0.42,off=(j%2?Math.PI/N:0)-Math.PI/2;const ps=[];for(let i=0;i<N;i++)ps.push(petal(ri*0.6,ro,off+i/N*TAU,TAU/N*1.05,M.shape));
+    let body=union(toC([...ps,ring(ri)]));let holes=[];if(M.lace){for(const p of ps){const h=offset(toC([p]),-lw);if(h.length&&Math.abs(areaC(h[0]))>lw*lw*2)holes.push(...h)}if(holes.length)holes=diff(union(holes),toC([ring(ri+lw)])).filter(h=>Math.abs(areaC(h))>lw*lw*2)}layers.push({body,holes,ro,ri})}
+  const center=M.hole>0?toC([ring(M.hole/2)]):[];
+  if(M.mode==='capas'){const cut=[];let x=0;for(const l of layers){let p=keepMain(diff(l.body,union([...l.holes,...center])));const pr=fromC(p);const b=bboxOf(pr);cut.push(...mv(pr,x-b.x0,-b.y0));x+=b.w+6}
+    R.decoInfo=`${L} capas para pegar una sobre otra (de la más grande a la más chica), girando cada una para alternar los pétalos.`;return dcFinish(R,cut,[])}
+  let body=union(layers.flatMap(l=>l.body));let holes=[];for(let j=0;j<L;j++){let h=layers[j].holes;const above=layers.slice(j+1).flatMap(l=>l.body);if(above.length&&h.length)h=diff(h,offset(union(above),lw));holes.push(...h)}
+  const p=keepMain(diff(body,union([...holes,...center])));R.decoInfo=`Mandala de ${fmtLen(M.d,0)} ${S.unit}: ${N} pétalos y ${L} capa${L>1?'s':''}.`;
+  if(lw<1.5&&M.lace)R.warn.push('Líneas de menos de 1,5 mm quedan frágiles en madera.');return dcFinish(R,fromC(p),[])}
+/* --- mariposas y flores --- */
+function butterflyShape(){const pts=[];const n=900;for(let i=0;i<n;i++){const t=i/n*12*Math.PI;const r=Math.exp(Math.cos(t))-2*Math.cos(4*t)-Math.pow(Math.sin(t/12),5);pts.push([Math.sin(t)*r,-Math.cos(t)*r])}
+  const u=union(toC([pts]),CL.PolyFillType.pftNonZero);return normRings(fromC(u.filter(p=>Math.abs(areaC(p))>0.02)))}
+function flowerShape(n){const pts=[];const m=360;for(let i=0;i<m;i++){const a=i/m*TAU;const r=0.62+0.38*Math.pow(Math.abs(Math.cos(n*a/2)),0.7);pts.push([Math.cos(a)*r,Math.sin(a)*r])}return normRings([pts])}
+let DC_SH=null;function dcShapes(){if(!DC_SH)DC_SH={mariposa:butterflyShape(),flor5:flowerShape(5),flor6:flowerShape(6),flor8:flowerShape(8),estrella:normRings([star(1,0.45,5)]),corazon:normRings([heartOutline(1.1,1)])};return DC_SH}
+function dcSet(){const T=DC().set,R=dcBase();const sh=dcShapes();let seed=T.seed*9301+49297;const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280};
+  const kinds=T.kind==='mix'?['mariposa','flor5','flor6','mariposa','flor8','corazon']:T.kind==='flores'?['flor5','flor6','flor8']:[T.kind];
+  const items=[];for(let i=0;i<T.count;i++){const k=kinds[i%kinds.length];const s=T.min+(T.max-T.min)*rnd();const g=sh[k];const asp=g.aspect;const w=asp>=1?s:s*asp,h=asp>=1?s/asp:s;
+    const rings=g.rings.map(r=>r.map(p=>[p[0]*w,p[1]*h]));const eng=[];if(k==='mariposa'&&T.fold)eng.push(rectR(-0.2,-h*0.3,0.4,h*0.6));if(k.startsWith('flor')&&T.center)eng.push(ring(s*0.12));items.push({rings,eng,w,h})}
+  items.sort((a,b)=>b.h-a.h);const sheet=Math.max(T.max*3,Math.min(S.bed.w,600));let x=0,y=0,rowH=0;const cut=[],eng=[];const gap=4;
+  for(const it of items){if(x>0&&x+it.w>sheet){x=0;y+=rowH+gap;rowH=0}const cx=x+it.w/2,cy=y+it.h/2;cut.push(...mv(it.rings,cx,cy));eng.push(...mv(it.eng,cx,cy));x+=it.w+gap;rowH=Math.max(rowH,it.h)}
+  R.decoInfo=`${T.count} piezas entre ${fmtLen(T.min,0)} y ${fmtLen(T.max,0)} ${S.unit}. Para mariposas 3D, dobla las alas por la línea grabada (en acrílico, con calor suave).`;
+  return dcFinish(R,fromC(union(toC(cut),CL.PolyFillType.pftNonZero)),eng)}
+/* --- llaveros --- */
+function dcLlavero(){const K=DC().llavero,R=dcBase(),warn=R.warn;const W=K.w,H=K.h,hr=K.hole/2;const txt=(K.text||'').trim()||'Nombre';
+  let t=dcText(txt,H*0.45,K.font);const room=K.shape==='texto'?W:W*0.78;if(t.w>room){t=dcText(txt,H*0.45*room/t.w,K.font)}
+  let outline,holeC,textAt;
+  if(K.shape==='texto'){const tr=mv(t.rings,0,0);const o=offset(union(toC(tr)),K.border);const ob=bboxOf(fromC(o));holeC=[ob.x0-hr-1,ob.y0+ob.h/2];outline=union([...o,...toC([ring(hr+3.5,holeC[0],holeC[1]),rectR(holeC[0],holeC[1]-hr-1.5,hr+4,2*hr+3)])]);textAt=[0,0]}
+  else{const sh=K.shape==='circulo'?ring(Math.min(W,H)/2,W/2,H/2):K.shape==='corazon'?heartOutline(W,H):rrectR(0,0,W,H,Math.min(W,H)*0.22);outline=toC([sh]);
+    holeC=K.shape==='rect'?[hr+4,H/2]:K.shape==='corazon'?[W*0.27,H*0.2+hr]:[W/2,hr+4];if(K.shape==='rect'){textAt=[hr*2+6+(W-hr*2-6-t.w)/2,(H-t.h)/2]}else textAt=[(W-t.w)/2,H*0.52-t.h/2]}
+  const piece=fromC(diff(outline,toC([ring(hr,holeC[0],holeC[1])])));const eng=K.mode==='grabado'?mv(t.rings,textAt[0],textAt[1]):[];
+  let cutP=piece;if(K.mode==='calado'){cutP=fromC(diff(toC(piece),toC(mv(t.rings,textAt[0],textAt[1]))));warn.push('Con texto calado, el centro de letras como o, a, e se cae.')}
+  const n=Math.max(1,Math.round(K.copies)),cols=Math.ceil(Math.sqrt(n));const bb=bboxOf(cutP);const cut=[],en=[];
+  for(let i=0;i<n;i++){const dx=(i%cols)*(bb.w+5)-bb.x0,dy=Math.floor(i/cols)*(bb.h+5)-bb.y0;cut.push(...mv(cutP,dx,dy));en.push(...mv(eng,dx,dy))}
+  if(K.hole<3)warn.push('Un agujero de menos de 3 mm no deja pasar la argolla.');
+  R.decoInfo=`${n} llavero${n>1?'s':''} de ${fmtLen(bb.w,0)} × ${fmtLen(bb.h,0)} ${S.unit}.`;return dcFinish(R,cut,en)}
+function buildDeco(){const t=DC().tool;try{return t==='topper'?dcTopper():t==='mandala'?dcMandala():t==='set'?dcSet():t==='llavero'?dcLlavero():dcReloj()}catch(e){console.warn(e);const R=dcBase();R.empty=true;R.bgText='No se pudo generar con estas medidas';return tlFinish(R)}}
+function dcStats(){const R=RESULT,T=DC();$('stAl').textContent='Decorador';$('stA').textContent=DC_NAMES[T.tool].split(' ')[0];$('pvTitle').textContent='Vista previa — '+DC_NAMES[T.tool];$('pvMeta').textContent='';
+  if(!R||R.empty){['stB','stC','stD'].forEach(x=>$(x).textContent='—');return}
+  $('stB').textContent=`${fmtLen(R.W,S.unit==='mm'?0:1)} × ${fmtLen(R.H,S.unit==='mm'?0:1)} ${S.unit}`;$('stCl').textContent='Piezas';$('stC').textContent=R.info.pieces||'—';
+  $('stD').textContent=R.cutLen>=1000?(R.cutLen/1000).toFixed(2)+' m':Math.round(R.cutLen)+' mm';if(!fnameTouched)$('fname').value=suggestName()}
+function dcProps(){const P=$('props'),R=RESULT;if(!R||R.empty){P.hidden=true;return}P.hidden=false;
+  P.innerHTML=`<div class="status ok"><b>${DC_NAMES[DC().tool]}</b><span>${R.decoInfo||''}</span></div>`+(R.warn.length?`<div class="status warn"><b>Atención</b><span>${R.warn.join(' ')}</span></div>`:'')+
+    `<div class="tools"><button class="tool primary" id="dcToDesign">Editar en Diseño libre →</button></div>`;
+  $('dcToDesign').onclick=()=>{const R=RESULT;if(!R||R.empty)return;const D=S.design;const k=Math.min(1,D.W*0.9/R.W,D.H*0.9/R.H);setTab('diseno');const ids=[];
+    const addRings=(rs,role,name)=>{if(!rs.length)return;const sid='s'+(++svgSeq);SVGS[sid]={name,...normFrame(rs,R.W,R.H)};const o=dsAdd({shape:'svg',svg:sid,role},0.4);Object.assign(o,{w:R.W*k,h:R.H*k,x:D.W/2,y:D.H/2});ids.push(o.id)};
+    addRings(R.cut,'cut',DC_NAMES[DC().tool].split(' ')[0]);addRings(R.engrave,'eng','Grabado');DS.sel=new Set(ids);schedule();toast(k<1?'Enviado a Diseño libre (se achicó para caber en el área).':'Enviado a Diseño libre: puedes moverlo, escalarlo y sumarle textos o formas.')}}
+
 function setTab(t){S.tab=t;document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===t)));
   document.querySelectorAll('[data-for]').forEach(el=>el.hidden=!el.dataset.for.split(' ').includes(t));
   pressGroup($('fitChips'),S.fitT[t]);
-  $('fmtBmp').hidden=t!=='foto';$('fmtRd').hidden=t==='foto';document.querySelector('.edbar').hidden=t==='foto'||t==='herramientas';$('edHint').hidden=t==='foto'||t==='herramientas';if(t==='foto'){$('props').hidden=true;phSync()}if(t==='herramientas'){setTool('select');tlSync()}
+  $('fmtBmp').hidden=t!=='foto';$('fmtRd').hidden=t==='foto';document.querySelector('.edbar').hidden=t==='foto'||t==='herramientas'||t==='deco';$('edHint').hidden=t==='foto'||t==='herramientas'||t==='deco';if(t==='deco'){setTool('select');dcSync()}if(t==='foto'){$('props').hidden=true;phSync()}if(t==='herramientas'){setTool('select');tlSync()}
   document.querySelectorAll('.edbar [data-nobox]').forEach(g=>g.hidden=t==='alcancia'||t==='diseno');
   document.querySelectorAll('.edbar [data-nods]').forEach(g=>g.hidden=t==='diseno');document.querySelectorAll('.edbar [data-onlyds]').forEach(g=>g.hidden=t!=='diseno');
   $('gContent').textContent=t==='diseno'?'Agregar objetos':'Contenido interno (nombres, fechas, dibujos)';
@@ -10474,7 +10652,7 @@ $('clearEd').onclick=()=>{if(!EDS().length)return;snap();S.edits[S.tab]=[];ED.se
 function svgPt(e){const pv=$('pv');const pt=pv.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const q=pt.matrixTransform(pv.getScreenCTM().inverse());return [q.x,q.y]}
 function toFrac(p){const r=RESULT.ref;return [(p[0]+RESULT.sx-r.x0)/r.W,(p[1]+RESULT.sy-r.y0)/r.W]}
 stage.addEventListener('pointerdown',e=>{
-  if(!RESULT||e.button>0||e.target.closest('.legend,.busy'))return;if(S.tab==='diseno')return dsDown(e);if(S.tab==='herramientas'&&tlDown(e))return;const p=svgPt(e),f=toFrac(p);const W=RESULT.ref.W;
+  if(!RESULT||e.button>0||e.target.closest('.legend,.busy'))return;if(S.tab==='diseno')return dsDown(e);if(S.tab==='deco'){ED.drag={type:'pan',x:e.clientX,y:e.clientY,px:S.panX,py:S.panY};stage.setPointerCapture(e.pointerId);return}if(S.tab==='herramientas'&&tlDown(e))return;const p=svgPt(e),f=toFrac(p);const W=RESULT.ref.W;
   stage.setPointerCapture(e.pointerId);
   const hEl=e.target.closest('[data-handle]'),oEl=e.target.closest('[data-ei]');
   if(ED.tool==='select'){
@@ -10516,6 +10694,7 @@ stage.addEventListener('pointerup',endDrag);stage.addEventListener('pointercance
 /* panel de propiedades de la edición seleccionada */
 const EDNAME=e=>e.op==='del'?'Pieza borrada':e.op==='delbox'?'Área borrada':e.shape==='text'?'“'+(e.text||'').replace(/\n/g,' ').slice(0,16)+'”':e.shape==='img'?'Imagen':e.shape==='svg'?(SVGS[e.svg]?.name||'Ícono'):e.shape==='lib'?(LIB[e.lib]?.name||'Forma'):e.op==='add'?'Puente':({slot:'Ranura',rect:'Rectángulo',circle:'Círculo'})[e.shape];
 function syncProps(onlyValues){
+  if(S.tab==='deco')return dcProps();
   if(S.tab==='herramientas')return tlProps();
   if(S.tab==='foto'){$('props').hidden=true;return}
   if(S.tab==='diseno')return dsProps();
@@ -10612,13 +10791,53 @@ $('lzProf').addEventListener('change',e=>{const o=PROFILES[+e.target.value];if(!
   for(const k in map)if(o[map[k]]!==''&&o[map[k]]!=null&&!isNaN(+o[map[k]]))S.laser[k]=+o[map[k]];if(!(S.laser.ei>0)&&o.dot)S.laser.ei=+o.dot;lzSync();scheduleSave();toast('Perfil aplicado: '+o.name)});
 $('machSet').addEventListener('toggle',lzSync);
 $('dsBed').onclick=()=>{snap();dsArea(S.bed.w,S.bed.h);toast('Área igual a la de la máquina')};
+
+const DC_DESC={reloj:'Esfera de reloj con números, marcas o teclado de piano y agujero para el mecanismo.',topper:'Texto para decorar tortas, con palitos para clavar.',mandala:'Rosetón de pétalos en una pieza o en capas para un efecto 3D.',set:'Varias mariposas, flores o figuras para decorar una pared.',llavero:'Llaveros con nombre, en varias formas y copias.'};
+function dcSync(){const T=DC();pressGroup($('dcPick'),T.tool);$('dcDesc').textContent=DC_DESC[T.tool];document.querySelectorAll('[data-dc]').forEach(el=>el.hidden=el.dataset.dc!==T.tool);
+  pressGroup($('rlStyle'),T.reloj.style);$('tpJoin').checked=T.topper.autoJoin!==false;pressGroup($('rlMode'),T.reloj.mode);$('rlHang').checked=T.reloj.hang;
+  ['tpL1','tpL2','kyText'].forEach(id=>{const k={tpL1:['topper','l1'],tpL2:['topper','l2'],kyText:['llavero','text']}[id];if(document.activeElement!==$(id))$(id).value=T[k[0]][k[1]]||''});
+  pressGroup($('tpStakes'),String(T.topper.stakes));pressGroup($('tpDeco'),T.topper.deco);pressGroup($('mdShape'),T.mandala.shape);pressGroup($('mdMode'),T.mandala.mode);$('mdLace').checked=T.mandala.lace;
+  pressGroup($('stKind'),T.set.kind);$('stFold').checked=T.set.fold;$('stCenter').checked=T.set.center;pressGroup($('kyShape'),T.llavero.shape);pressGroup($('kyMode'),T.llavero.mode);
+  document.querySelectorAll('[data-ky]').forEach(el=>el.hidden=!el.dataset.ky.split(' ').includes(T.llavero.shape));dcFontDDs.forEach(f=>f());CTLS.forEach(f=>f())}
+chipGroup('dcPick',()=>DC().tool,v=>DC().tool=v,()=>{S.zoom=1;S.panX=S.panY=0;dcSync()});
+chipGroup('rlStyle',()=>DC().reloj.style,v=>DC().reloj.style=v);chipGroup('rlMode',()=>DC().reloj.mode,v=>DC().reloj.mode=v);
+chipGroup('tpStakes',()=>String(DC().topper.stakes),v=>DC().topper.stakes=+v);chipGroup('tpDeco',()=>DC().topper.deco,v=>DC().topper.deco=v);
+chipGroup('mdShape',()=>DC().mandala.shape,v=>DC().mandala.shape=v);chipGroup('mdMode',()=>DC().mandala.mode,v=>DC().mandala.mode=v);
+chipGroup('stKind',()=>DC().set.kind,v=>DC().set.kind=v);chipGroup('kyShape',()=>DC().llavero.shape,v=>DC().llavero.shape=v,dcSync);chipGroup('kyMode',()=>DC().llavero.mode,v=>DC().llavero.mode=v);
+[['tpJoin','topper','autoJoin'],['rlHang','reloj','hang'],['mdLace','mandala','lace'],['stFold','set','fold'],['stCenter','set','center']].forEach(([id,g,k])=>$(id).addEventListener('change',e=>{DC()[g][k]=e.target.checked;schedule()}));
+[['tpL1','topper','l1'],['tpL2','topper','l2'],['kyText','llavero','text']].forEach(([id,g,k])=>$(id).addEventListener('input',e=>{DC()[g][k]=e.target.value;schedule();dcFontDDs.forEach(f=>f())}));
+$('stShuffle').onclick=()=>{DC().set.seed=(DC().set.seed%997)+1;schedule()};
+const dcFontDDs=[['rlFont','reloj','font',()=>'12 3 6 9'],['tpFont1','topper','font1',()=>DC().topper.l1||'Feliz'],['tpFont2','topper','font2',()=>DC().topper.l2||'Sofía'],['kyFont','llavero','font',()=>DC().llavero.text||'Nombre']].map(([id,g,k,sample])=>makeDD($(id),{items:()=>fontItems().map(i=>({...i,html:`<span class="ddl" style="font-family:'ff_${i.v}',var(--body)">${esc(sample()).slice(0,14)}</span><span class="ddn">${i.label}</span>`})),
+  get:()=>DC()[g][k],search:true,set:v=>{DC()[g][k]=v;schedule()},btnHtml:it=>`<span class="ddv" style="font-family:'ff_${it.v}',var(--body)">${esc(sample()).slice(0,16)}<small>${it.label} · ${it.group}</small></span>`}));
+makeCtl('ctlRlD',{label:'Diámetro',min:100,max:800,len:true,get:()=>DC().reloj.d,set:v=>DC().reloj.d=v});
+makeCtl('ctlRlNum',{label:'Tamaño de los números',min:4,max:20,step:0.5,get:()=>DC().reloj.num,set:v=>DC().reloj.num=v,suffix:' % del diámetro'});
+makeCtl('ctlRlHole',{label:'Agujero central',min:3,max:15,step:0.1,get:()=>DC().reloj.hole,set:v=>DC().reloj.hole=v,fmt:v=>v.toFixed(1)+' mm'});
+makeCtl('ctlRlRim',{label:'Aro grabado en el borde',min:0,max:20,step:0.5,get:()=>DC().reloj.rim,set:v=>DC().reloj.rim=v,fmt:v=>v?v+' mm':'Sin aro'});
+makeCtl('ctlTpW',{label:'Ancho del texto',min:60,max:400,len:true,get:()=>DC().topper.w,set:v=>DC().topper.w=v});
+makeCtl('ctlTpWeld',{label:'Grosor de unión de letras',min:0,max:3,step:0.1,get:()=>DC().topper.weld,set:v=>DC().topper.weld=v,fmt:v=>v.toFixed(1)+' mm'});
+makeCtl('ctlTpGap',{label:'Espacio entre líneas',min:-10,max:20,step:0.5,get:()=>DC().topper.gap,set:v=>DC().topper.gap=v,fmt:v=>v+' mm'});
+makeCtl('ctlTpLen',{label:'Largo de los palitos',min:30,max:200,len:true,get:()=>DC().topper.len,set:v=>DC().topper.len=v});
+makeCtl('ctlTpSw',{label:'Ancho de los palitos',min:3,max:15,step:0.5,get:()=>DC().topper.sw,set:v=>DC().topper.sw=v,fmt:v=>v+' mm'});
+makeCtl('ctlMdD',{label:'Diámetro',min:50,max:800,len:true,get:()=>DC().mandala.d,set:v=>DC().mandala.d=v});
+makeCtl('ctlMdN',{label:'Pétalos',min:5,max:32,step:1,get:()=>DC().mandala.n,set:v=>DC().mandala.n=v});
+makeCtl('ctlMdL',{label:'Capas',min:1,max:5,step:1,get:()=>DC().mandala.layers,set:v=>DC().mandala.layers=v});
+makeCtl('ctlMdLine',{label:'Grosor de las líneas',min:1,max:8,step:0.1,get:()=>DC().mandala.line,set:v=>DC().mandala.line=v,fmt:v=>v.toFixed(1)+' mm'});
+makeCtl('ctlMdHole',{label:'Agujero central',min:0,max:40,step:0.5,get:()=>DC().mandala.hole,set:v=>DC().mandala.hole=v,fmt:v=>v?v+' mm':'Sin agujero'});
+makeCtl('ctlStN',{label:'Cantidad',min:1,max:60,step:1,get:()=>DC().set.count,set:v=>DC().set.count=v});
+makeCtl('ctlStMin',{label:'Tamaño mínimo',min:15,max:300,len:true,get:()=>DC().set.min,set:v=>{DC().set.min=v;if(DC().set.max<v)DC().set.max=v}});
+makeCtl('ctlStMax',{label:'Tamaño máximo',min:15,max:400,len:true,get:()=>DC().set.max,set:v=>{DC().set.max=v;if(DC().set.min>v)DC().set.min=v}});
+makeCtl('ctlKyW',{label:'Ancho',min:20,max:150,len:true,get:()=>DC().llavero.w,set:v=>DC().llavero.w=v});
+makeCtl('ctlKyH',{label:'Alto',min:12,max:120,len:true,get:()=>DC().llavero.h,set:v=>DC().llavero.h=v});
+makeCtl('ctlKyB',{label:'Borde alrededor del texto',min:1.5,max:10,step:0.5,get:()=>DC().llavero.border,set:v=>DC().llavero.border=v,fmt:v=>v+' mm'});
+makeCtl('ctlKyHole',{label:'Agujero para la argolla',min:2,max:10,step:0.5,get:()=>DC().llavero.hole,set:v=>DC().llavero.hole=v,fmt:v=>v+' mm'});
+makeCtl('ctlKyN',{label:'Copias',min:1,max:40,step:1,get:()=>DC().llavero.copies,set:v=>DC().llavero.copies=v});
 $('aboutBtn').onclick=()=>{const d=$('aboutDlg');if(d.showModal)d.showModal();else d.setAttribute('open','')};
 
 /* ---------- guardado automático y proyectos ---------- */
 const IDB={db:null,open(){return this.db||(this.db=new Promise((res,rej)=>{const r=indexedDB.open('vectorizador-laser',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}))},
   async tx(mode,fn){const db=await this.open();return new Promise((res,rej)=>{const t=db.transaction('kv',mode);const q=fn(t.objectStore('kv'));t.oncomplete=()=>res(q&&q.result);t.onerror=()=>rej(t.error)})},
   get(k){return this.tx('readonly',s=>s.get(k))},set(k,v){return this.tx('readwrite',s=>s.put(v,k))},del(k){return this.tx('readwrite',s=>s.delete(k))}};
-const SAVE_KEYS=['bed','grid','laser','tools','photo','tab','letra','numero','palabras','font','unit','size','fitT','spacing','lineGap','align','weld','style','pattern','cell','hole','rot','border','minA','fullOnly','mode','baseOff','kerf','img','incGuide','edits','clean','box','design'];
+const SAVE_KEYS=['deco','bed','grid','laser','tools','photo','tab','letra','numero','palabras','font','unit','size','fitT','spacing','lineGap','align','weld','style','pattern','cell','hole','rot','border','minA','fullOnly','mode','baseOff','kerf','img','incGuide','edits','clean','box','design'];
 function bufToB64(buf){let s='';const u=new Uint8Array(buf);for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)}
 function snapshotState(){const st={app:'vectorizador-laser',v:1,t:Date.now(),S:{},imgs:{},svgs:{},fonts:{},IMG:null,seq:{imgSeq,svgSeq}};
   for(const k of SAVE_KEYS)st.S[k]=S[k];
@@ -10672,7 +10891,7 @@ let newArm=null;$('projNew').onclick=async()=>{const b=$('projNew');
 /* inicio */
 syncMode();syncStyle();
 let t0='letras';try{t0=localStorage.getItem('vl_tab')||'letras'}catch(e){}
-if(!['letras','numeros','palabras','imagen','alcancia','diseno','foto','herramientas'].includes(t0))t0='letras';
+if(!['letras','numeros','palabras','imagen','alcancia','diseno','foto','herramientas','deco'].includes(t0))t0='letras';
 setTab(t0);syncUnitUI();loadProfiles().then(()=>{if(S.tab==='herramientas')schedule()});restoreAutosave();
 </script>
 </body></html>

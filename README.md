@@ -26,6 +26,7 @@ También puedes usarlo en línea activando **GitHub Pages** en este repositorio 
 | **Imagen** | Vectoriza logos y dibujos. Limpieza de restos, engrosado de líneas finas y “conservar solo la figura principal”. |
 | **Alcancía por capas** | Alcancía con la inicial de un nombre, en capas de MDF y acrílico, con el nombre en la tipografía que elijas. |
 | **Diseño libre** | Carteles y letreros con formas, textos, imágenes (umbral o trama de puntos) e íconos que se mueven y editan por separado. Unir/separar, duplicar, copia matricial y espejar. |
+| **Decoradores** | Relojes de pared, toppers para torta, mandalas, sets de mariposas y flores, y llaveros con nombre. Se pueden seguir editando en Diseño libre. |
 | **Foto a trama** | Convierte fotos en puntos (Floyd-Steinberg, Atkinson, Stucki, Bayer, semitono…), con el tamaño de punto del láser. Exporta BMP de 1 bit con DPI. |
 | **Herramientas** | Quitar fondo, recortar fotos con formas, perfiles de material, pruebas de enfoque, potencia/velocidad y kerf, y **generador de cajas**. |
 
