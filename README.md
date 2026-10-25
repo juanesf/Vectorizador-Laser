@@ -13,7 +13,8 @@ Es **un solo archivo HTML** que funciona en el navegador **sin instalar nada y s
 
 1. Descarga `index.html` (o el `.zip` portable de la sección *Releases*).
 2. Ábrelo con doble clic en Chrome, Edge, Firefox o Safari actualizados.
-3. Tu trabajo se guarda solo en el navegador. Para llevarlo a otro computador usa **Guardar proyecto** y después **Abrir proyecto**.
+3. Arriba, junto a las unidades, configura el **área de trabajo de tu máquina** (por ejemplo 600 × 400 mm) y el tamaño de la cuadrícula.
+4. Tu trabajo se guarda solo en el navegador. Para llevarlo a otro computador usa **Guardar proyecto** y después **Abrir proyecto**.
 
 También puedes usarlo en línea activando **GitHub Pages** en este repositorio (Settings → Pages → rama `main`, carpeta raíz). Queda disponible en `https://<tu-usuario>.github.io/vectorizador-laser/`.
 
@@ -24,7 +25,7 @@ También puedes usarlo en línea activando **GitHub Pages** en este repositorio 
 | **Letras · Números · Palabras** | Texto con 44 tipografías libres. Estilos: entera, solo bordes o rellena con patrones (estrellas, lunas, dinosaurios, gatos…). Unir letras, ranuras, limpieza y contenido interno (textos, fechas, formas, imágenes). |
 | **Imagen** | Vectoriza logos y dibujos. Limpieza de restos, engrosado de líneas finas y “conservar solo la figura principal”. |
 | **Alcancía por capas** | Alcancía con la inicial de un nombre, en capas de MDF y acrílico, con el nombre en la tipografía que elijas. |
-| **Diseño libre** | Carteles y letreros con formas, textos, imágenes e íconos que se mueven y editan por separado. Unir/separar, duplicar, copia matricial y espejar. |
+| **Diseño libre** | Carteles y letreros con formas, textos, imágenes (umbral o trama de puntos) e íconos que se mueven y editan por separado. Unir/separar, duplicar, copia matricial y espejar. |
 | **Foto a trama** | Convierte fotos en puntos (Floyd-Steinberg, Atkinson, Stucki, Bayer, semitono…), con el tamaño de punto del láser. Exporta BMP de 1 bit con DPI. |
 | **Herramientas** | Quitar fondo, recortar fotos con formas, perfiles de material, pruebas de enfoque, potencia/velocidad y kerf, y **generador de cajas**. |
 

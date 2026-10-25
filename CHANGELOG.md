@@ -1,5 +1,14 @@
 # Cambios
 
+## 1.1.0 — 2026-10-25
+
+- Área de trabajo de la máquina configurable junto a las unidades (por ejemplo 600 × 400 mm), con medidas comunes. Se dibuja en la vista previa y avisa si el diseño no cabe.
+- Cuadrícula con regla en milímetros (o la unidad elegida), ajustable de 10 a 100 mm. Por defecto mide 50 mm.
+- Todos los controles deslizantes permiten escribir el número directamente.
+- Herramientas → Quitar fondo / Recortar con forma: nuevo botón “Enviar a Diseño libre”. La foto llega como trama de puntos vectorial, junto con su contorno de corte y alineada con él.
+- Diseño libre: las imágenes tienen estilo “Umbral” (dibujos y logos) o “Trama de puntos” (fotos), con tamaño de celda y punto mínimo.
+- Diseño libre: botón “Usar el área de la máquina”.
+
 ## 1.0.0 — 2026-10-23
 
 Primera versión pública.

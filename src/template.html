@@ -1,5 +1,5 @@
 <!--
-  Vectorizador Láser v1.0.0
+  Vectorizador Láser v1.1.0
   Copyright (C) 2026 Cecilia Vivot <ceciliavivot@gmail.com> y Juan Sanchez <juanesf91@gmail.com>
   Co-asistido por Claude (Anthropic).
   Este programa es software libre: puedes redistribuirlo y/o modificarlo bajo los términos de la
@@ -108,7 +108,7 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
 .meta{color:var(--muted);font-size:13.5px}
 .zb{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--chip);cursor:pointer;font-weight:700;font-size:16px;display:grid;place-items:center}
 .stage{position:relative;height:min(62vh,560px);min-height:340px;background-color:var(--paper);
-  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:20px 20px;overflow:hidden;cursor:grab;touch-action:none}
+  overflow:hidden;cursor:grab;touch-action:none}
 .stage.drag{cursor:grabbing}
 .stage svg{width:100%;height:100%;display:block}
 .busy{position:absolute;left:16px;bottom:14px;font-size:12px;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
@@ -128,6 +128,12 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
 .mgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 8px;align-items:end}.mgrid .mh{grid-column:1/-1;font-weight:700;font-size:13px;display:flex;align-items:center;gap:6px;margin-top:4px}
 .mgrid label{display:flex;flex-direction:column;gap:3px;font-size:11.5px;color:var(--muted)}.mgrid .num{padding:7px 8px;font-size:13px}.mh .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
 .about{max-width:560px;border:1px solid var(--line);border-radius:14px;padding:22px 24px;background:var(--card);color:var(--ink)}.about::backdrop{background:rgba(15,20,40,.45)}.about h2{margin:0 0 10px;font-family:var(--display)}.about small{font-size:13px;color:var(--muted)}.about p{font-size:14px;line-height:1.5}
+.bedbar{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;border-top:1px solid var(--accent-line);padding-top:8px}
+.bedin{display:inline-flex;align-items:center;gap:4px}.bedin .num{width:78px;flex:none;padding:6px 8px;font-size:13px}.bedin .bu,.bedbar .x{font-size:12.5px;color:var(--muted)}
+.bedbar select{padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit;font-size:13px}
+.valin{font-family:var(--mono);font-size:12px;color:var(--accent);width:64px;text-align:right;border:1px solid transparent;border-radius:6px;padding:2px 4px;background:transparent}
+.valin:hover{border-color:var(--line)}.valin:focus{border-color:var(--accent);background:var(--card);outline:none}.valw{display:inline-flex;align-items:center;gap:3px}.valw .vsuf{font-family:var(--mono);font-size:12px;color:var(--accent)}
+.bedwarn{position:absolute;left:12px;top:12px;z-index:3;font-size:12.5px;background:var(--warn-soft);color:var(--warn);border:1px solid currentColor;border-radius:8px;padding:5px 9px;pointer-events:none}
 .export{display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--line);padding-top:18px}
 .exportsec .fmts{grid-template-columns:repeat(2,minmax(0,1fr))}
 .exportsec .fname{flex-direction:column;align-items:stretch;gap:4px}.exportsec .fname input{width:100%}
@@ -157,6 +163,7 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
 .props{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 14px;padding:12px 28px;border-bottom:1px solid var(--line)}
 .props .f{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
 .props .f input{width:84px;border:1px solid var(--line);border-radius:7px;padding:6px 8px;background:var(--card);font-family:var(--mono);font-size:13px;color:var(--ink)}
+.props .f select{border:1px solid var(--line);border-radius:7px;padding:6px 8px;background:var(--card);font-size:13px;color:var(--ink);font-family:inherit}
 .props b{font-family:var(--display);font-size:14px;align-self:center}
 .grp{display:flex;flex-direction:column;gap:4px}
 .gl{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
@@ -335,7 +342,7 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
     </section>
     <section class="sec" data-for="herramientas" data-tl="fondo recorte">
       <label class="tog"><input type="checkbox" id="tlWithCut" checked> Incluir el contorno de corte al enviar</label>
-      <div class="chips"><button class="btn" id="tlSend">Enviar a Foto a trama →</button><button class="btn" id="tlToDesign">Contorno a Diseño libre →</button></div>
+      <div class="chips"><button class="btn" id="tlSend">Enviar a Foto a trama →</button><button class="btn" id="tlToDesignImg">Enviar a Diseño libre →</button><button class="btn" id="tlToDesign">Solo el contorno a Diseño libre →</button></div>
     </section>
     <section class="sec" data-for="herramientas" data-tl="perfiles">
       <div class="lbl">Nuevo perfil</div>
@@ -473,7 +480,7 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
       <div class="row"><label class="sub" for="dsW">Ancho (<span class="dsu">mm</span>)</label><input class="num" id="dsW" style="max-width:110px;flex:none"></div>
       <div class="row"><label class="sub" for="dsH">Alto (<span class="dsu">mm</span>)</label><input class="num" id="dsH" style="max-width:110px;flex:none"></div>
       <div class="chips" id="dsPresets"><button class="chip" data-wh="297x210">A4</button><button class="chip" data-wh="420x297">A3</button><button class="chip" data-wh="300x200">30×20 cm</button><button class="chip" data-wh="600x400">60×40 cm</button><button class="chip" data-wh="300x300">30×30 cm</button></div>
-      <div class="chips"><button class="btn" id="dsRot">Girar área 90°</button></div>
+      <div class="chips"><button class="btn" id="dsRot">Girar área 90°</button><button class="btn" id="dsBed">Usar el área de la máquina</button></div>
       <div class="lbl" style="margin-top:8px">Cómo se usa</div>
       <ul class="tips" style="padding-left:16px">
         <li>Agrega formas, textos o imágenes con la barra de arriba. Cada uno es un objeto independiente.</li>
@@ -589,7 +596,12 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
       <div class="head"><h1>Vectorizador <span>Láser</span></h1><p>Letras, números, palabras e imágenes convertidos en vectores para corte y grabado con láser CO₂.</p>
         <div class="unitbar"><span class="gl">Unidades de trabajo y exportación</span>
           <div class="seg" id="unitChips" role="group" aria-label="Unidades"><button class="chip" data-v="mm">Milímetros (mm)</button><button class="chip" data-v="cm">Centímetros (cm)</button><button class="chip" data-v="in">Pulgadas (in)</button></div>
-          <span class="sub" id="unitNote"></span></div>
+          <span class="sub" id="unitNote"></span>
+          <div class="bedbar"><span class="gl">Área de trabajo de la máquina</span>
+            <label class="bedin"><input class="num" id="bedW" inputmode="decimal"><span class="bu">mm</span></label><span class="x">×</span><label class="bedin"><input class="num" id="bedH" inputmode="decimal"><span class="bu">mm</span></label>
+            <select id="bedPreset" title="Medidas comunes"><option value="">Medidas comunes…</option><option value="300x200">30 × 20 cm (K40)</option><option value="400x400">40 × 40 cm</option><option value="500x300">50 × 30 cm</option><option value="600x400">60 × 40 cm</option><option value="700x500">70 × 50 cm</option><option value="900x600">90 × 60 cm</option><option value="1300x900">130 × 90 cm</option><option value="1600x1000">160 × 100 cm</option></select>
+            <span class="gl" style="margin-left:6px">Cuadrícula</span><label class="bedin"><input class="num" id="gridIn" inputmode="decimal"><span class="bu">mm</span></label>
+            <input type="range" id="gridR" min="10" max="100" step="5" style="width:110px" aria-label="Tamaño de la cuadrícula"></div></div>
         <div class="projbar"><span class="savestate" id="saveState"><span class="dot"></span>Guardado automático activado</span>
           <div class="tools"><button class="tool" id="projSave" title="Descarga un archivo con todo tu trabajo para abrirlo en otro computador"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Guardar proyecto</button>
           <button class="tool" id="projOpen" title="Abre un archivo de proyecto guardado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M3 7h6l2 2h10v10H3z"/></svg>Abrir proyecto</button><input type="file" id="projFile" accept=".json,application/json" hidden>
@@ -653,7 +665,7 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
         </div></div>
       </div>
       <div class="edhint" id="edHint"></div>
-      <div class="stage" id="stage"><svg id="pv" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="stage" id="stage"><div class="bedwarn" id="bedWarn" hidden></div><svg id="pv" xmlns="http://www.w3.org/2000/svg"></svg>
         <div class="busy" id="busy" hidden>Calculando…</div>
         <div class="legend"><label id="lgHide" style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="hideOv"> Ver solo el resultado</label><span id="lgCut"><i style="border-color:var(--cut)"></i><span id="lgCutT">Línea de corte</span></span><span id="lgAcr" hidden><i style="border-color:var(--acrline)"></i>Acrílico</span><span id="lgEdit"><i style="border-color:var(--edit);border-top-style:dashed"></i>Zona editada</span><span id="lgGuide"><i style="border-color:var(--guide)"></i>Guía (no se corta)</span></div>
       </div>
@@ -673,7 +685,7 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
 <script src="https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/clipper-lib@6.4.2/clipper.js"></script>
 <dialog id="aboutDlg" class="about">
-  <h2>Vectorizador Láser <small>v1.0.0</small></h2>
+  <h2>Vectorizador Láser <small>v1.1.0</small></h2>
   <p>Creado por <b>Cecilia Vivot</b> y <b>Juan Sanchez</b>. Co-asistido por Claude (Anthropic).</p>
   <p>Software libre bajo licencia <b>GPL-3.0 o posterior</b>: puedes usarlo, copiarlo, modificarlo y compartirlo, siempre manteniendo la misma licencia y entregando el código. Lo que fabriques con el programa (piezas cortadas o grabadas) es tuyo y puedes venderlo sin restricciones.</p>
   <p class="sub">Incluye: opentype.js (MIT), Clipper (Boost), tipografías de Google Fonts (OFL / Apache 2.0), íconos Fluent Emoji High Contrast, Phosphor y Tabler (MIT) y Material Design Icons (Apache 2.0). El archivo .rd usa la codificación documentada por meerk40t (MIT). Ideas de cajas inspiradas en boxes.py de Florian Festi.</p>
@@ -688,6 +700,7 @@ const ICON_DATA = __ICONS__;
 /* ---------- estado ---------- */
 const UNITS={mm:1,cm:10,in:25.4};
 const S={
+  bed:{w:600,h:400},grid:50,
   laser:{cp:60,cv:15,cn:1,ep:20,ev:300,ei:0.1,origin:'current'},
   tab:'letras', letra:'A', numero:'7', palabras:'Hola',
   font:'alfa', unit:'mm', size:{letras:101.6,numeros:101.6,palabras:300,imagen:200,alcancia:200,diseno:300,foto:150,herramientas:100}, fitT:{letras:'h',numeros:'h',palabras:'w',imagen:'w',alcancia:'h',diseno:'w',foto:'w',herramientas:'w'},
@@ -724,12 +737,19 @@ function makeCtl(hostId,o){
   // o: {label, min,max,step, get(), set(v), len:true(mm unit-aware), suffix}
   const host=$(hostId); const id='c_'+hostId;
   host.className='ctl';
-  host.innerHTML=`<div class="row"><label for="${id}r" style="font-weight:600;font-size:13.5px">${o.label}</label><span class="val" id="${id}v"></span></div>
+  host.innerHTML=`<div class="row"><label for="${id}r" style="font-weight:600;font-size:13.5px">${o.label}</label><span class="valw"><input class="valin" id="${id}v" inputmode="decimal" aria-label="${o.label}" title="Escribe el valor y presiona Enter"><span class="vsuf" id="${id}s"></span></span></div>
   <input type="range" id="${id}r">`;
-  const r=$(id+'r'), v=$(id+'v');
+  const r=$(id+'r'), v=$(id+'v'), sf=$(id+'s');
   const conv=()=>o.len?uf():1;
+  const dec=()=>{if(o.len)return S.unit==='mm'?1:S.unit==='cm'?2:3;const st=String(o.step||1);return st.includes('.')?st.split('.')[1].length:0};
+  const suffix=()=>{if(o.len)return S.unit;if(o.suffix)return o.suffix.trim();if(o.fmt){const t=String(o.fmt(o.max));const m=t.match(/^[-\d.,]+\s*(.*)$/);return m?m[1]:''}return ''};
   const sync=()=>{const c=conv();r.min=o.min/c;r.max=o.max/c;r.step=o.len?(S.unit==='in'?0.01:S.unit==='cm'?0.05:0.5):o.step;r.value=o.get()/c;
-    v.textContent=o.len?fmtBoth(o.get()):(o.fmt?o.fmt(o.get()):o.get()+(o.suffix||''))};
+    if(document.activeElement!==v)v.value=String(+(o.get()/c).toFixed(dec()));sf.textContent=suffix();v.title=o.fmt?String(o.fmt(o.get())):'Escribe el valor y presiona Enter'};
+  v.addEventListener('change',()=>{const n=parseFloat(String(v.value).replace(',','.'));if(isNaN(n)){sync();return}let x=n*conv();
+    if(x<o.min||x>o.max){toast(`Usa un valor entre ${+(o.min/conv()).toFixed(dec())} y ${+(o.max/conv()).toFixed(dec())}${suffix()?' '+suffix():''}`);x=Math.max(o.min,Math.min(o.max,x))}
+    o.set(x);v.blur();sync();schedule()});
+  v.addEventListener('keydown',e=>{if(e.key==='Enter')v.blur();if(e.key==='Escape'){sync();v.blur()}});
+  v.addEventListener('focus',()=>v.select());
   r.addEventListener('input',()=>{o.set(+r.value*conv());sync();if(lastMs<250)schedule()});
   r.addEventListener('change',()=>{if(lastMs>=250)schedule()});
   CTLS.push(sync); sync(); return sync;
@@ -958,10 +978,17 @@ function imgGray(id){const I=IMGS[id];if(I.gray)return I;const src=I.img;const s
   const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d',{willReadFrequently:true});g.fillStyle='#fff';g.fillRect(0,0,w,h);g.drawImage(src,0,0,w,h);
   const d=g.getImageData(0,0,w,h).data;let gray=new Float32Array(w*h);for(let i=0;i<w*h;i++)gray[i]=0.299*d[i*4]+0.587*d[i*4+1]+0.114*d[i*4+2];gray=boxBlur(gray,w,h);
   Object.assign(I,{gray,w,h,otsu:localOtsu(gray)});return I}
-function imgShape(e){const I=IMGS[e.img];if(!I)return normRings([R(-.5,-.5,.5,.5)]);const thr=e.thr??imgGray(e.img).otsu;const key=thr+'|'+(e.inv?1:0);
+function normFrame(rs,W,H){return {rings:rs.map(r=>r.map(p=>[p[0]/W-.5,p[1]/H-.5])),aspect:W/H}}
+function imgDots(e){const I=IMGS[e.img];const {gray,w,h}=imgGray(e.img);const cell=Math.max(0.3,e.cell||1);let n=Math.max(4,Math.round((e.w||100)/cell));let cp=w/n,rows=Math.max(1,Math.round(h/cp));
+  while(n*rows>40000){n=Math.round(n*0.9);cp=w/n;rows=Math.max(1,Math.round(h/cp))}const key='dots|'+n+'|'+(e.inv?1:0)+'|'+(e.dmin??0.2);if(!I.cache)I.cache={};if(I.cache[key])return I.cache[key];
+  const mmPx=(e.w||100)/w,minR=(e.dmin??0.2)/2/mmPx,ch=h/rows,out=[];const poly=[...Array(10)].map((_,k)=>[Math.cos(k/10*TAU),Math.sin(k/10*TAU)]);
+  for(let j=0;j<rows;j++)for(let i=0;i<n;i++){const x=(i+.5)*cp,y=(j+.5)*ch;let g=0,c=0;for(let yy=Math.floor(j*ch);yy<Math.min(h,Math.ceil((j+1)*ch));yy++)for(let xx=Math.floor(i*cp);xx<Math.min(w,Math.ceil((i+1)*cp));xx++){g+=gray[yy*w+xx];c++}
+    let v=1-(c?g/c:255)/255;if(e.inv)v=1-v;if(v<0.04)continue;const r=Math.min(cp,ch)/2*0.95*Math.sqrt(v);if(r<minR)continue;out.push(poly.map(p=>[x+p[0]*r,y+p[1]*r]))}
+  return I.cache[key]=out.length?normFrame(out,w,h):normFrame([[[0,0],[0.01,0],[0.01,0.01]]],w,h)}
+function imgShape(e){const I=IMGS[e.img];if(!I)return normRings([R(-.5,-.5,.5,.5)]);if(e.style==='dots')return imgDots(e);const thr=e.thr??imgGray(e.img).otsu;const key=thr+'|'+(e.inv?1:0)+(e.full?'|f':'');
   if(!I.cache)I.cache={};if(!I.cache[key]){const {gray,w,h}=imgGray(e.img);const fg=new Uint8Array(w*h);for(let i=0;i<w*h;i++){const dk=gray[i]<thr;fg[i]=(e.inv?!dk:dk)?1:0}
     despeckle(fg,w,h,Math.round(w*h/40000));const rs=traceBinary(fg,w,h).map(r=>chaikin(simplifyRing(r,0.7),1)).filter(r=>r.length>=3);
-    I.cache[key]=rs.length?normRings(fromC(union(toC(rs.map(r=>r.map(p=>[p[0]/10,p[1]/10]))),CL.PolyFillType.pftEvenOdd))):normRings([R(-.5,-.5,.5,.5)])}
+    const fr=rs.length?fromC(union(toC(rs.map(r=>r.map(p=>[p[0]/10,p[1]/10]))),CL.PolyFillType.pftEvenOdd)):[];I.cache[key]=fr.length?(e.full?normFrame(fr,w/10,h/10):normRings(fr)):normRings([R(-.5,-.5,.5,.5)])}
   return I.cache[key]}
 function contentShape(e){return e.shape==='text'?textShape(e):e.shape==='img'?imgShape(e):e.shape==='svg'?(SVGS[e.svg]||normRings([R(-.5,-.5,.5,.5)])):libShape(e.lib)}
 function shapeRings(e,ref){
@@ -1332,8 +1359,22 @@ function setView(){
   const m=Math.max(W,H)*0.12+2;let vw=W+m*2,vh=H+m*2;const ar=st.width/st.height;
   if(vw/vh<ar)vw=vh*ar;else vh=vw/ar;vw/=S.zoom;vh/=S.zoom;
   const cx=W/2-S.panX,cy=H/2-S.panY;pv.setAttribute('viewBox',`${cx-vw/2} ${cy-vh/2} ${vw} ${vh}`);
-  renderOv();
+  drawGrid(W,H);renderOv();
 }
+function drawGrid(W,H){const pv=$('pv'),NS='http://www.w3.org/2000/svg';let g=document.getElementById('mmgrid');if(!g){g=document.createElementNS(NS,'g');g.id='mmgrid';g.setAttribute('pointer-events','none')}
+  if(g.parentNode!==pv||pv.firstChild!==g)pv.insertBefore(g,pv.firstChild);const vb=pv.viewBox.baseVal;if(!vb||!vb.width){g.innerHTML='';return}
+  const k=vb.width/($('stage').clientWidth||1);let st=Math.max(1,S.grid||50);while(vb.width/st>150)st*=2;
+  const x0=Math.floor(vb.x/st)*st,y0=Math.floor(vb.y/st)*st,x1=vb.x+vb.width,y1=vb.y+vb.height;let d='',lab='';const fs=10.5*k;
+  const L=v=>{const t=fmtLen(v,S.unit==='mm'?0:S.unit==='cm'?1:2);return t==='-0'?'0':t};
+  const ev=Math.max(1,Math.ceil(46*k/st)),evy=Math.max(1,Math.ceil(24*k/st));const on=(v,e)=>Math.round(v/st)%e===0;
+  for(let x=x0;x<=x1;x+=st){d+=`M${x} ${vb.y}V${y1}`;if(on(x,ev))lab+=`<text x="${x+3*k}" y="${vb.y+13*k}">${L(x)}</text>`}
+  for(let y=y0;y<=y1;y+=st){d+=`M${vb.x} ${y}H${x1}`;if(y>vb.y+20*k&&on(y,evy))lab+=`<text x="${vb.x+3*k}" y="${y-3*k}">${L(y)}</text>`}
+  const B=S.bed||{w:600,h:400};
+  g.innerHTML=`<path d="${d}" stroke="var(--grid)" stroke-width="1" vector-effect="non-scaling-stroke" fill="none"/><path d="M0 ${vb.y}V${y1}M${vb.x} 0H${x1}" stroke="var(--muted)" stroke-opacity=".35" stroke-width="1" vector-effect="non-scaling-stroke"/>`+
+    `<rect x="0" y="0" width="${B.w}" height="${B.h}" fill="none" stroke="var(--accent)" stroke-opacity=".55" stroke-width="1.2" stroke-dasharray="8 5" vector-effect="non-scaling-stroke"/>`+
+    `<text x="${2*k}" y="${B.h+13*k}" font-size="${fs}" fill="var(--accent)" fill-opacity=".8" font-family="Figtree,system-ui,sans-serif">Área de la máquina ${L(B.w)} × ${L(B.h)} ${S.unit}</text>`+
+    `<g font-size="${fs}" fill="var(--muted)" font-family="JetBrains Mono,monospace">${lab}</g>`;
+  const bw=$('bedWarn');const over=W>B.w+0.01||H>B.h+0.01;bw.hidden=!over;if(over)bw.textContent=`No cabe en el área de la máquina (${L(B.w)} × ${L(B.h)} ${S.unit}): mide ${L(W)} × ${L(H)} ${S.unit}`}
 const pxMM=()=>{const vb=$('pv').viewBox.baseVal;return vb&&vb.width?vb.width/$('stage').clientWidth:1};
 function edPv(e){const r=RESULT.ref;return shapeRings(e,r).map(q=>q.map(p=>[p[0]-RESULT.sx,p[1]-RESULT.sy]))}
 function fracToPv(fx,fy){const r=RESULT.ref;return [r.x0+fx*r.W-RESULT.sx,r.y0+fy*r.W-RESULT.sy]}
@@ -1591,9 +1632,16 @@ function chipGroup(id,get,set,after){const h=$(id);h.addEventListener('click',e=
 chipGroup('alignChips',()=>S.align,v=>S.align=v);
 chipGroup('fitChips',()=>S.fitT[S.tab],v=>S.fitT[S.tab]=v);
 chipGroup('unitChips',()=>S.unit,v=>S.unit=v,()=>{try{localStorage.setItem('vl_unit',S.unit)}catch(e){}syncUnitUI();scheduleSave()});
-function syncUnitUI(){pressGroup($('unitChips'),S.unit);syncSize();CTLS.forEach(f=>f());try{dsSyncArea()}catch(e){}document.querySelectorAll('.dsu').forEach(x=>x.textContent=S.unit);
+function syncBedUI(){const B=S.bed;const d=S.unit==='mm'?0:2;if(document.activeElement!==$('bedW'))$('bedW').value=fmtLen(B.w,d);if(document.activeElement!==$('bedH'))$('bedH').value=fmtLen(B.h,d);
+  if(document.activeElement!==$('gridIn'))$('gridIn').value=fmtLen(S.grid,S.unit==='mm'?0:2);$('gridR').value=S.grid;document.querySelectorAll('.bu').forEach(x=>x.textContent=S.unit)}
+function syncUnitUI(){syncBedUI();pressGroup($('unitChips'),S.unit);syncSize();CTLS.forEach(f=>f());try{dsSyncArea()}catch(e){}document.querySelectorAll('.dsu').forEach(x=>x.textContent=S.unit);
   const n={mm:'milímetros',cm:'centímetros',in:'pulgadas'}[S.unit];$('unitNote').innerHTML=`Medidas en <b>${n}</b>. SVG y DXF se descargan en ${n}; PDF, EPS, PLT y PNG conservan el tamaño real.`;try{syncProps()}catch(e){}}
 try{const u=localStorage.getItem('vl_unit');if(u&&UNITS[u])S.unit=u}catch(e){}
+const numU=v=>parseFloat(String(v).replace(',','.'))*uf();
+['bedW','bedH'].forEach(id=>$(id).addEventListener('change',e=>{const v=numU(e.target.value);if(!(v>=50&&v<=5000)){toast('Usa una medida entre 50 y 5000 mm');syncBedUI();return}S.bed=Object.assign({},S.bed,{[id==='bedW'?'w':'h']:Math.round(v*100)/100});syncBedUI();setView();scheduleSave()}));
+$('bedPreset').addEventListener('change',e=>{const v=e.target.value;if(!v)return;const [w,h]=v.split('x').map(Number);S.bed={w,h};e.target.value='';syncBedUI();setView();scheduleSave();toast(`Área de la máquina: ${fmtLen(w,0)} × ${fmtLen(h,0)} ${S.unit}`)});
+$('gridIn').addEventListener('change',e=>{const v=numU(e.target.value);if(!(v>=10-0.01&&v<=100+0.01)){toast('La cuadrícula va de 10 a 100 mm');syncBedUI();return}S.grid=Math.round(v*10)/10;syncBedUI();setView();scheduleSave()});
+$('gridR').addEventListener('input',e=>{S.grid=+e.target.value;syncBedUI();setView()});$('gridR').addEventListener('change',()=>scheduleSave());
 chipGroup('modeChips',()=>S.mode,v=>S.mode=v,syncMode);
 function syncMode(){$('modeHelp').textContent={cut:'Contorno y huecos como líneas de corte (rojo).',engrave:'Toda la figura como relleno para grabar (negro).',base:'Silueta exterior con margen para cortar + figura grabada encima.'}[S.mode];
   $('ctlBase').hidden=S.mode!=='base'}
@@ -1885,7 +1933,7 @@ function dsProps(){const P=$('props'),O=OBJ(),sel=dsSelected(),st=(RESULT&&RESUL
   if(one){const i=O.indexOf(one),s=st[i]||{};
     h+=`<div class="status ${s.warn?'warn':'ok'}" id="pstatus">${statusHtml(s)}</div>`+roles(one.role)+
     (one.shape==='text'?`<label class="f">Texto (Enter = otra línea)<textarea id="dstext" spellcheck="false">${(one.text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</textarea></label><div class="f">Tipografía<div class="dd ddwrap" id="dsfont"></div></div>`:'')+
-    (one.shape==='img'?`<label class="f">Umbral<input type="range" id="dsthr" min="1" max="254" value="${one.thr??128}" style="width:150px"></label><label class="mini"><input type="checkbox" id="dsinv" ${one.inv?'checked':''}> Invertir</label>`:'')+
+    (one.shape==='img'?`<label class="f">Estilo<select id="dsistyle"><option value="thr" ${one.style!=='dots'?'selected':''}>Umbral (dibujo, logo)</option><option value="dots" ${one.style==='dots'?'selected':''}>Trama de puntos (foto)</option></select></label>`+(one.style==='dots'?`<label class="f">Celda (mm)<input id="dscell" inputmode="decimal" value="${one.cell||1}"></label><label class="f">Punto mínimo (mm)<input id="dsdmin" inputmode="decimal" value="${one.dmin??0.2}"></label>`:`<label class="f">Umbral<input type="range" id="dsthr" min="1" max="254" value="${one.thr??128}" style="width:150px"></label>`)+`<label class="mini"><input type="checkbox" id="dsinv" ${one.inv?'checked':''}> Invertir</label>`:'')+
     (one.shape==='lib'?`<span class="tool" style="cursor:default"><span style="width:18px;height:18px;display:inline-grid">${libIcon(one.lib)}</span>${LIB[one.lib].name}</span>`:'')+
     `<label class="f">X (${S.unit})<input id="dsx" inputmode="decimal" value="${u(one.x)}"></label><label class="f">Y (${S.unit})<input id="dsy" inputmode="decimal" value="${u(one.y)}"></label>
     <label class="f">Ancho (${S.unit})<input id="dsw" inputmode="decimal" value="${u(one.w)}"></label><label class="f">Alto (${S.unit})<input id="dsh" inputmode="decimal" value="${u(one.h)}"></label>
@@ -1912,7 +1960,8 @@ $('props').addEventListener('input',e=>{if(S.tab!=='diseno')return;const one=dsS
   if(e.target.id==='dstext'){const hh=one.h;one.text=e.target.value;one.w=hh*textShape(one).aspect;schedule()}
   else if(e.target.id==='dsthr'){one.thr=+e.target.value;if(lastMs<250)schedule()}},true);
 $('props').addEventListener('change',e=>{if(S.tab!=='diseno')return;e.stopPropagation();const one=dsSelected()[0];if(!one)return;const id=e.target.id;
-  if(id==='dstext')return;if(id==='dsthr'){snap();schedule();return}if(id==='dsinv'){snap();one.inv=e.target.checked;schedule();return}
+  if(id==='dstext')return;if(id==='dsthr'){snap();schedule();return}if(id==='dsinv'){snap();one.inv=e.target.checked;schedule();return}if(id==='dsistyle'){snap();one.style=e.target.value==='dots'?'dots':'thr';if(one.style==='dots'&&!one.cell)one.cell=1;dsProps&&(document.getElementById('props').dataset.ds='');schedule();return}
+  if(id==='dscell'||id==='dsdmin'){const v=parseFloat(String(e.target.value).replace(',','.'));const lim=id==='dscell'?[0.3,10]:[0,3];if(v>=lim[0]&&v<=lim[1]){snap();one[id==='dscell'?'cell':'dmin']=v;schedule()}else{toast(`Usa un valor entre ${lim[0]} y ${lim[1]} mm`);e.target.value=one[id==='dscell'?'cell':'dmin']??(id==='dscell'?1:0.2)}return}
   const v=parseFloat(String(e.target.value).replace(',','.'));if(!isFinite(v)){syncProps();return}snap();
   if(id==='dsx')one.x=v*uf();else if(id==='dsy')one.y=v*uf();else if(id==='dsw'&&v>0){const nw=v*uf();if(one.shape!=='lib')one.h*=nw/one.w;one.w=nw}else if(id==='dsh'&&v>0){const nh=v*uf();if(one.shape!=='lib')one.w*=nh/one.h;one.h=nh}
   else if(id==='dsr')one.rot=v;else if(id==='dsg'&&v>=-1&&v<=3)one.grow=v;schedule()},true);
@@ -2599,6 +2648,19 @@ $('tlSend').onclick=()=>{const R=RESULT;if(!R||!TLIMG.img){toast('Primero sube u
   else if(TT().tool==='recorte'){sendToPhoto(R.cropCanvas,R.W,$('tlWithCut').checked?R.outline:null)}};
 $('tlToDesign').onclick=()=>{const R=RESULT;if(!R||!R.outline||!R.outline.length){toast('No hay contorno para enviar');return}
   const id='s'+(++svgSeq);SVGS[id]={name:TT().tool==='fondo'?'Silueta':'Contorno',...normRings(R.outline)};const prev=S.tab;setTab('diseno');dsAdd({shape:'svg',svg:id,role:'cut'},0.4);toast('Contorno agregado a Diseño libre como pieza de corte.')};
+function tlCanvas(){const R=RESULT;if(TT().tool==='fondo'){const mk=tlMask();const pad=R.pad||0;const wpx=Math.min(3000,Math.round(TT().bg.w*10));const base=maskedCanvas(mk,wpx,true);
+    const k=wpx/TT().bg.w;const c=document.createElement('canvas');c.width=Math.round(wpx+2*pad*k);c.height=Math.round(base.height+2*pad*k);const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(base,pad*k,pad*k);return c}
+  if(TT().tool==='recorte'&&R.cropCanvas){const s=R.cropCanvas;const c=document.createElement('canvas');c.width=s.width;c.height=s.height;const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(s,0,0);return c}return null}
+$('tlToDesignImg').onclick=()=>{const R=RESULT;if(!R||!TLIMG.img){toast('Primero sube una foto');return}const c0=tlCanvas();if(!c0){toast('Nada para enviar');return}
+  const sc=Math.min(1,1600/Math.max(c0.width,c0.height));const c=document.createElement('canvas');c.width=Math.round(c0.width*sc);c.height=Math.round(c0.height*sc);c.getContext('2d').drawImage(c0,0,0,c.width,c.height);
+  const url=c.toDataURL('image/jpeg',0.9);const name=(TLIMG.name||'foto').replace(/\.[^.]+$/,'')+(TT().tool==='fondo'?'-sin-fondo':'-recorte')+'.jpg';const withCut=$('tlWithCut').checked&&R.outline&&R.outline.length;
+  const im=new Image();im.onload=()=>{const id='i'+(++imgSeq);IMGS[id]={img:im,name,url};setTab('diseno');const D=S.design;
+    let W=R.W,H=R.H;const k=Math.min(1,D.W*0.9/W,D.H*0.9/H);W*=k;H*=k;const cx=D.W/2,cy=D.H/2;const grp=withCut?'g'+newId():undefined;
+    const o=dsAdd({shape:'img',img:id,style:'dots',cell:1,dmin:0.2,inv:false,full:true,role:'eng',thr:imgGray(id).otsu},0.4);Object.assign(o,{w:W,h:H,x:cx,y:cy});if(grp)o.grp=grp;
+    if(withCut){const sid='s'+(++svgSeq);SVGS[sid]={name:TT().tool==='fondo'?'Silueta':'Contorno',...normRings(R.outline)};const bb=bboxOf(R.outline);
+      const oc=dsAdd({shape:'svg',svg:sid,role:'cut'},0.4);Object.assign(oc,{w:bb.w*k,h:bb.h*k,x:cx+(bb.x0+bb.w/2-R.W/2)*k,y:cy+(bb.y0+bb.h/2-R.H/2)*k,grp});DS.sel=new Set([o.id,oc.id])}
+    if(k<1)toast('La foto se achicó para caber en el área de trabajo; puedes agrandar el área.');else toast(withCut?'Foto (trama de puntos) y contorno de corte enviados juntos. Usa “Separar” para moverlos por separado.':'Foto enviada como trama de puntos. Puedes cambiar a “Umbral” en el panel de abajo.');
+    schedule()};im.src=url};
 /* kerf medido */
 $('kfCalc').onclick=()=>{const m=parseFloat(String($('kfMeas').value).replace(',','.'));const K=TT().kerf;const nom=K.n*K.w;if(!(m>0&&m<nom)){toast(`Escribe la medida de las ${K.n} piezas juntas (debe ser menor a ${nom} mm)`);return}
   const k=(nom-m)/K.n;$('kfOut').innerHTML=`Kerf ≈ <b>${k.toFixed(3).replace('.',',')} mm</b>. <button class="btn" id="kfUse">Usar en cortes y cajas</button>`;
@@ -2847,13 +2909,14 @@ $('lzOrigin').addEventListener('change',e=>{S.laser=lzr();S.laser.origin=e.targe
 $('lzProf').addEventListener('change',e=>{const o=PROFILES[+e.target.value];if(!o)return;S.laser=lzr();const map={cp:'cp',cv:'cv',cn:'cn',ep:'ep',ev:'ev',ei:'ei'};
   for(const k in map)if(o[map[k]]!==''&&o[map[k]]!=null&&!isNaN(+o[map[k]]))S.laser[k]=+o[map[k]];if(!(S.laser.ei>0)&&o.dot)S.laser.ei=+o.dot;lzSync();scheduleSave();toast('Perfil aplicado: '+o.name)});
 $('machSet').addEventListener('toggle',lzSync);
+$('dsBed').onclick=()=>{snap();dsArea(S.bed.w,S.bed.h);toast('Área igual a la de la máquina')};
 $('aboutBtn').onclick=()=>{const d=$('aboutDlg');if(d.showModal)d.showModal();else d.setAttribute('open','')};
 
 /* ---------- guardado automático y proyectos ---------- */
 const IDB={db:null,open(){return this.db||(this.db=new Promise((res,rej)=>{const r=indexedDB.open('vectorizador-laser',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}))},
   async tx(mode,fn){const db=await this.open();return new Promise((res,rej)=>{const t=db.transaction('kv',mode);const q=fn(t.objectStore('kv'));t.oncomplete=()=>res(q&&q.result);t.onerror=()=>rej(t.error)})},
   get(k){return this.tx('readonly',s=>s.get(k))},set(k,v){return this.tx('readwrite',s=>s.put(v,k))},del(k){return this.tx('readwrite',s=>s.delete(k))}};
-const SAVE_KEYS=['laser','tools','photo','tab','letra','numero','palabras','font','unit','size','fitT','spacing','lineGap','align','weld','style','pattern','cell','hole','rot','border','minA','fullOnly','mode','baseOff','kerf','img','incGuide','edits','clean','box','design'];
+const SAVE_KEYS=['bed','grid','laser','tools','photo','tab','letra','numero','palabras','font','unit','size','fitT','spacing','lineGap','align','weld','style','pattern','cell','hole','rot','border','minA','fullOnly','mode','baseOff','kerf','img','incGuide','edits','clean','box','design'];
 function bufToB64(buf){let s='';const u=new Uint8Array(buf);for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)}
 function snapshotState(){const st={app:'vectorizador-laser',v:1,t:Date.now(),S:{},imgs:{},svgs:{},fonts:{},IMG:null,seq:{imgSeq,svgSeq}};
   for(const k of SAVE_KEYS)st.S[k]=S[k];
