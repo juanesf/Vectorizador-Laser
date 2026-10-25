@@ -1,5 +1,11 @@
 # Cambios
 
+## 1.2.1 — 2026-10-25
+
+- Diseño libre: las tramas de foto guardan la foto original y aceptan todos los tipos de trama (Floyd–Steinberg, Atkinson, Jarvis, Stucki, Sierra, Bayer, puntos, líneas, umbral, boceto y escala de grises). También se ajustan el punto del láser, el ángulo, el contraste, el brillo y la opción de invertir.
+- Al cambiar el tamaño de una trama en Diseño libre, se recalcula sola para conservar el tamaño de punto del láser.
+- Herramientas → “Enviar a Diseño libre” ahora envía la foto como trama editable.
+
 ## 1.2.0 — 2026-10-25
 
 - Diseño libre: la selección usa la forma real de cada objeto (no su rectángulo). Al hacer clic se elige el objeto más chico bajo el puntero, o el contorno que estás tocando.

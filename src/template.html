@@ -1,5 +1,5 @@
 <!--
-  Vectorizador Láser v1.2.0
+  Vectorizador Láser v1.2.1
   Copyright (C) 2026 Cecilia Vivot <ceciliavivot@gmail.com> y Juan Sanchez <juanesf91@gmail.com>
   Co-asistido por Claude (Anthropic).
   Este programa es software libre: puedes redistribuirlo y/o modificarlo bajo los términos de la
@@ -687,7 +687,7 @@ textarea{min-height:76px;font-family:var(--display);font-size:18px;font-weight:6
 <script src="https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/clipper-lib@6.4.2/clipper.js"></script>
 <dialog id="aboutDlg" class="about">
-  <h2>Vectorizador Láser <small>v1.2.0</small></h2>
+  <h2>Vectorizador Láser <small>v1.2.1</small></h2>
   <p>Creado por <b>Cecilia Vivot</b> y <b>Juan Sanchez</b>. Co-asistido por Claude (Anthropic).</p>
   <p>Software libre bajo licencia <b>GPL-3.0 o posterior</b>: puedes usarlo, copiarlo, modificarlo y compartirlo, siempre manteniendo la misma licencia y entregando el código. Lo que fabriques con el programa (piezas cortadas o grabadas) es tuyo y puedes venderlo sin restricciones.</p>
   <p class="sub">Incluye: opentype.js (MIT), Clipper (Boost), tipografías de Google Fonts (OFL / Apache 2.0), íconos Fluent Emoji High Contrast, Phosphor y Tabler (MIT) y Material Design Icons (Apache 2.0). El archivo .rd usa la codificación documentada por meerk40t (MIT). Ideas de cajas inspiradas en boxes.py de Florian Festi.</p>
@@ -1833,6 +1833,14 @@ function dsRenderOv(){const g=$('ov');if(!g)return;const k=pxMM(),O=OBJ();let h=
   if(DS.box){const b=DS.box;h+=`<rect x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${b[3]}" fill="var(--accent)" fill-opacity=".06" stroke="var(--accent)" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"/>`}
   g.innerHTML=h}
 function dsRefresh(){renderOv();syncProps();updateStats()}
+/* tramas dentro de Diseño libre: se recalculan desde la foto original con el tipo de trama elegido */
+const RAS_ALGOS=()=>ALGOS.map(([g,l])=>[g,l.filter(a=>a[0]!=='vector')]);
+function rasRender(o,quiet){const I=IMGS[o.src];if(!I||!I.img)return false;const P=Object.assign({},S.photo,o.ph||{},{w:Math.max(5,o.w)});if(P.algo==='vector')P.algo='fs';
+  let R;try{R=buildPhoto(P,I.img)}catch(e){console.warn(e);return false}const url=R.raster.toDataURL('image/png');
+  IMGS[o.img]={img:R.raster,url,name:(I.name||'foto').replace(/\.[^.]+$/,'')+'-trama.png',dot:R.dot};o.h=o.w*R.H/R.W;if(!quiet)schedule();return true}
+let rasT=0;function rasLater(o){clearTimeout(rasT);rasT=setTimeout(()=>{if(rasRender(o))scheduleSave()},120)}
+function rasSrc(canvas,name){const sc=Math.min(1,2400/Math.max(canvas.width,canvas.height));const c=document.createElement('canvas');c.width=Math.round(canvas.width*sc);c.height=Math.round(canvas.height*sc);const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(canvas,0,0,c.width,c.height);
+  const id='i'+(++imgSeq);IMGS[id]={img:c,name,url:c.toDataURL('image/jpeg',0.92)};return id}
 /* selección: el objeto bajo el puntero según su forma real; clic repetido = el de abajo */
 function ptInRings(p,rs){let c=false;for(const r of rs)for(let i=0,j=r.length-1;i<r.length;j=i++){const a=r[i],b=r[j];if((a[1]>p[1])!==(b[1]>p[1])&&p[0]<(b[0]-a[0])*(p[1]-a[1])/(b[1]-a[1])+a[0])c=!c}return c}
 function distRings(p,rs,lim){let m=1e9;for(const r of rs)for(let i=0;i<r.length;i++){const a=r[i],b=r[(i+1)%r.length];const dx=b[0]-a[0],dy=b[1]-a[1],l=dx*dx+dy*dy;let t=l?((p[0]-a[0])*dx+(p[1]-a[1])*dy)/l:0;t=Math.max(0,Math.min(1,t));const d=Math.hypot(a[0]+t*dx-p[0],a[1]+t*dy-p[1]);if(d<m){m=d;if(m<lim*0.3)return m}}return m}
@@ -1868,7 +1876,7 @@ function dsMove(e){const d=DS.drag;if(d.t==='pan'){const k=pxMM();S.panX=d.px+(e
   if(d.t==='rot'){const o=d.o;let ang=Math.atan2(p[1]-o.y,p[0]-o.x)*180/Math.PI+90;if(e.shiftKey)ang=Math.round(ang/15)*15;o.rot=((ang%360)+360)%360;if(o.rot>180)o.rot-=360;d.moved=true;renderOv();syncProps(true);return}
   if(d.t==='marq'){DS.box=[Math.min(p[0],d.p0[0]),Math.min(p[1],d.p0[1]),Math.abs(p[0]-d.p0[0]),Math.abs(p[1]-d.p0[1])];renderOv()}}
 function dsUp(e){const d=DS.drag;DS.drag=null;stage.classList.remove('drag');if(!d)return;
-  if((d.t==='move'||d.t==='resize'||d.t==='rot')&&d.moved){ED.undo.push({tab:'diseno',e:d.before});ED.redo=[];syncUndo();schedule();return}
+  if((d.t==='move'||d.t==='resize'||d.t==='rot')&&d.moved){ED.undo.push({tab:'diseno',e:d.before});ED.redo=[];syncUndo();if(d.t==='resize'&&d.o&&d.o.shape==='ras'&&d.o.src)rasRender(d.o,true);schedule();return}
   const lc=DS.lastClick;DS.lastClick=d.t==='move'&&!d.moved?{x:d.cx,y:d.cy,t:Date.now()}:null;
   if(d.t==='move'&&!d.moved&&d.wasSel&&lc&&Math.hypot(lc.x-d.cx,lc.y-d.cy)<6&&Date.now()-lc.t<5000&&d.hits.length>1&&DS.sel.size===1){const n=d.hits.length,i=d.hits.indexOf(d.pick),nx=d.hits[(i+1)%n];DS.sel=new Set([nx]);dsRefresh();
     const o=OBJ().find(q=>q.id===nx);if(o)toast(`${dsNameN(o)} (${(i+1)%n+1} de ${n}) · clic otra vez para el siguiente`);return}
@@ -1961,6 +1969,7 @@ function dsProps(){const P=$('props'),O=OBJ(),sel=dsSelected(),st=(RESULT&&RESUL
     h+=`<div class="status ${s.warn?'warn':'ok'}" id="pstatus">${statusHtml(s)}</div>`+(one.shape==='ras'?'':roles(one.role))+
     (one.shape==='text'?`<label class="f">Texto (Enter = otra línea)<textarea id="dstext" spellcheck="false">${(one.text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</textarea></label><div class="f">Tipografía<div class="dd ddwrap" id="dsfont"></div></div>`:'')+
     (one.shape==='img'?`<label class="f">Estilo<select id="dsistyle"><option value="thr" ${one.style!=='dots'?'selected':''}>Umbral (dibujo, logo)</option><option value="dots" ${one.style==='dots'?'selected':''}>Trama de puntos (foto)</option></select></label>`+(one.style==='dots'?`<label class="f">Celda (mm)<input id="dscell" inputmode="decimal" value="${one.cell||1}"></label><label class="f">Punto mínimo (mm)<input id="dsdmin" inputmode="decimal" value="${one.dmin??0.2}"></label>`:`<label class="f">Umbral<input type="range" id="dsthr" min="1" max="254" value="${one.thr??128}" style="width:150px"></label>`)+`<label class="mini"><input type="checkbox" id="dsinv" ${one.inv?'checked':''}> Invertir</label>`:'')+
+    (one.shape==='ras'?(one.src&&IMGS[one.src]?`<label class="f">Tipo de trama<select id="dsalgo">${RAS_ALGOS().map(([g,l])=>`<optgroup label="${g}">${l.map(a=>`<option value="${a[0]}" ${((one.ph||{}).algo||'fs')===a[0]?'selected':''}>${a[1]}</option>`).join('')}</optgroup>`).join('')}</select></label><label class="f">Punto del láser (mm)<input id="dsdot" inputmode="decimal" value="${(one.ph||{}).dot??S.photo.dot}"></label><label class="f">Ángulo (°)<input id="dsang" inputmode="decimal" value="${(one.ph||{}).angle??0}"></label><label class="f">Contraste<input id="dscon" inputmode="decimal" value="${(one.ph||{}).contrast??0}"></label><label class="f">Brillo<input id="dsbri" inputmode="decimal" value="${(one.ph||{}).bright??0}"></label><label class="mini"><input type="checkbox" id="dsrinv" ${(one.ph||{}).invert?'checked':''}> Invertir</label>`:'<span class="sub">Esta trama no guarda la foto original; para cambiar el tipo de trama vuelve a enviarla desde Foto a trama.</span>'):'')+
     (one.shape==='lib'?`<span class="tool" style="cursor:default"><span style="width:18px;height:18px;display:inline-grid">${libIcon(one.lib)}</span>${LIB[one.lib].name}</span>`:'')+
     `<label class="f">X (${S.unit})<input id="dsx" inputmode="decimal" value="${u(one.x)}"></label><label class="f">Y (${S.unit})<input id="dsy" inputmode="decimal" value="${u(one.y)}"></label>
     <label class="f">Ancho (${S.unit})<input id="dsw" inputmode="decimal" value="${u(one.w)}"></label><label class="f">Alto (${S.unit})<input id="dsh" inputmode="decimal" value="${u(one.h)}"></label>
@@ -1992,7 +2001,11 @@ $('props').addEventListener('input',e=>{if(S.tab!=='diseno')return;const one=dsS
   if(e.target.id==='dstext'){const hh=one.h;one.text=e.target.value;one.w=hh*textShape(one).aspect;schedule()}
   else if(e.target.id==='dsthr'){one.thr=+e.target.value;if(lastMs<250)schedule()}},true);
 $('props').addEventListener('change',e=>{if(S.tab!=='diseno')return;e.stopPropagation();const one=dsSelected()[0];if(!one)return;const id=e.target.id;
-  if(id==='dstext')return;if(id==='dsthr'){snap();schedule();return}if(id==='dsinv'){snap();one.inv=e.target.checked;schedule();return}if(id==='dsistyle'){snap();one.style=e.target.value==='dots'?'dots':'thr';if(one.style==='dots'&&!one.cell)one.cell=1;dsProps&&(document.getElementById('props').dataset.ds='');schedule();return}
+  if(id==='dstext')return;if(id==='dsthr'){snap();schedule();return}if(id==='dsinv'){snap();one.inv=e.target.checked;schedule();return}if(one&&one.shape==='ras'&&['dsalgo','dsdot','dsang','dscon','dsbri','dsrinv'].includes(id)){const ph=one.ph=Object.assign({},one.ph||{});
+    if(id==='dsalgo')ph.algo=e.target.value;else if(id==='dsrinv')ph.invert=e.target.checked;else{const v=parseFloat(String(e.target.value).replace(',','.'));const lim={dsdot:[0.03,1,'dot'],dsang:[-90,90,'angle'],dscon:[-100,100,'contrast'],dsbri:[-100,100,'bright']}[id];
+      if(!(v>=lim[0]&&v<=lim[1])){toast(`Usa un valor entre ${lim[0]} y ${lim[1]}`);e.target.value=ph[lim[2]]??'';return}ph[lim[2]]=v}
+    snap();toast('Recalculando la trama…');setTimeout(()=>{rasRender(one);document.getElementById('props').dataset.ds=''},30);return}
+  if(id==='dsistyle'){snap();one.style=e.target.value==='dots'?'dots':'thr';if(one.style==='dots'&&!one.cell)one.cell=1;dsProps&&(document.getElementById('props').dataset.ds='');schedule();return}
   if(id==='dscell'||id==='dsdmin'){const v=parseFloat(String(e.target.value).replace(',','.'));const lim=id==='dscell'?[0.3,10]:[0,3];if(v>=lim[0]&&v<=lim[1]){snap();one[id==='dscell'?'cell':'dmin']=v;schedule()}else{toast(`Usa un valor entre ${lim[0]} y ${lim[1]} mm`);e.target.value=one[id==='dscell'?'cell':'dmin']??(id==='dscell'?1:0.2)}return}
   const v=parseFloat(String(e.target.value).replace(',','.'));if(!isFinite(v)){syncProps();return}snap();
   if(id==='dsx')one.x=v*uf();else if(id==='dsy')one.y=v*uf();else if(id==='dsw'&&v>0){const nw=v*uf();if(one.shape!=='lib')one.h*=nw/one.w;one.w=nw}else if(id==='dsh'&&v>0){const nh=v*uf();if(one.shape!=='lib')one.w*=nh/one.h;one.h=nh}
@@ -2152,7 +2165,7 @@ function samplePhoto(){const c=document.createElement('canvas');c.width=600;c.he
   const r=g.createRadialGradient(230,170,20,260,210,170);r.addColorStop(0,'#ffffff');r.addColorStop(0.6,'#777');r.addColorStop(1,'#111');g.fillStyle=r;g.beginPath();g.arc(260,215,165,0,TAU);g.fill();
   for(let i=0;i<10;i++){g.fillStyle=`rgb(${i*28},${i*28},${i*28})`;g.fillRect(450,20+i*40,130,40)}
   g.fillStyle='#000';g.font='bold 34px sans-serif';g.fillText('Muestra',30,425);return c}
-function photoGray(P,wpx,hpx){const src=PHOTO.img||(PHOTO.sample||(PHOTO.sample=samplePhoto()));
+function photoGray(P,wpx,hpx,SRC){const src=SRC||PHOTO.img||(PHOTO.sample||(PHOTO.sample=samplePhoto()));
   const c=document.createElement('canvas');c.width=wpx;c.height=hpx;const g=c.getContext('2d',{willReadFrequently:true});g.fillStyle='#fff';g.fillRect(0,0,wpx,hpx);
   g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(src,0,0,wpx,hpx);const d=g.getImageData(0,0,wpx,hpx).data;const n=wpx*hpx;let a=new Float32Array(n);
   for(let i=0;i<n;i++)a[i]=0.299*d[i*4]+0.587*d[i*4+1]+0.114*d[i*4+2];
@@ -2160,10 +2173,10 @@ function photoGray(P,wpx,hpx){const src=PHOTO.img||(PHOTO.sample||(PHOTO.sample=
   const C=P.contrast*2.55,f=(259*(C+255))/(255*(259-C));
   for(let i=0;i<n;i++){let v=f*(a[i]-128)+128+P.bright*2.55;v=Math.max(0,Math.min(255,v));v=255*Math.pow(v/255,P.gamma);if(v>=P.white)v=255;a[i]=v}
   return a}
-function buildPhoto(){const P=S.photo;const src=PHOTO.img||(PHOTO.sample||(PHOTO.sample=samplePhoto()));const asp=src.height/src.width;const Wmm=P.w,Hmm=Wmm*asp;const warn=[];
+function buildPhoto(P=S.photo,SRC=null){const src=SRC||PHOTO.img||(PHOTO.sample||(PHOTO.sample=samplePhoto()));const asp=src.height/src.width;const Wmm=P.w,Hmm=Wmm*asp;const warn=[];
   const base={photo:true,W:Wmm,H:Hmm,cut:[],engrave:[],guide:[],ref:{x0:0,y0:0,W:1,H:1},sx:0,sy:0,status:[],info:{holes:0,pieces:0},cutLen:0,paths:0,warn};
   if(P.algo==='vector'){const cs=P.vcell,hex=P.vgrid==='hex',sy=hex?cs*Math.sqrt(3)/2:cs;const cols=Math.ceil(Wmm/cs)+1,rows=Math.ceil(Hmm/sy)+1;
-    const gw=Math.max(8,Math.ceil(Wmm/cs*2)),gh=Math.max(8,Math.ceil(Hmm/cs*2));const a=photoGray(P,gw,gh);const out=[];const an=P.angle*Math.PI/180,ca=Math.cos(an),sa=Math.sin(an);const R0=Math.hypot(Wmm,Hmm)/2+cs;
+    const gw=Math.max(8,Math.ceil(Wmm/cs*2)),gh=Math.max(8,Math.ceil(Hmm/cs*2));const a=photoGray(P,gw,gh,SRC);const out=[];const an=P.angle*Math.PI/180,ca=Math.cos(an),sa=Math.sin(an);const R0=Math.hypot(Wmm,Hmm)/2+cs;
     const nj=Math.ceil(R0/sy),ni=Math.ceil(R0/cs)+1;
     for(let j=-nj;j<=nj;j++)for(let i=-ni;i<=ni;i++){const u=i*cs+(hex&&(j&1)?cs/2:0),w=j*sy;const x=Wmm/2+u*ca-w*sa,y=Hmm/2+u*sa+w*ca;if(x<0||y<0||x>Wmm||y>Hmm)continue;
       let v=1-a[Math.min(gh-1,Math.floor(y/Hmm*gh))*gw+Math.min(gw-1,Math.floor(x/Wmm*gw))]/255;if(P.invert)v=1-v;
@@ -2174,7 +2187,7 @@ function buildPhoto(){const P=S.photo;const src=PHOTO.img||(PHOTO.sample||(PHOTO
     return base}
   let dot=P.dot;let wpx=Math.max(8,Math.round(Wmm/dot)),hpx=Math.max(8,Math.round(Hmm/dot));
   if(wpx*hpx>24e6){const k=Math.sqrt(24e6/(wpx*hpx));wpx=Math.round(wpx*k);hpx=Math.round(hpx*k);dot=Wmm/wpx;warn.push(`La imagen era demasiado grande; se calculó con puntos de ${dot.toFixed(3)} mm. Achica el ancho para usar tu tamaño de punto.`)}
-  const n=wpx*hpx,a=photoGray(P,wpx,hpx);const v=new Float32Array(n);for(let i=0;i<n;i++){let d=1-a[i]/255;if(P.invert)d=1-d;v[i]=d} // v=1 → quemar
+  const n=wpx*hpx,a=photoGray(P,wpx,hpx,SRC);const v=new Float32Array(n);for(let i=0;i<n;i++){let d=1-a[i]/255;if(P.invert)d=1-d;v[i]=d} // v=1 → quemar
   const out=new Uint8ClampedArray(n);let gray=false;
   if(KERNELS[P.algo]){const K=KERNELS[P.algo],div=KDIV[P.algo];
     const diffuse=(vv,ww,hh,oo)=>{for(let y=0;y<hh;y++){const rev=P.serp&&(y&1);for(let xx=0;xx<ww;xx++){const x=rev?ww-1-xx:xx;const i=y*ww+x;const o=vv[i],nv=o>=0.5?1:0;oo[i]=nv;const e=o-nv;
@@ -2205,7 +2218,7 @@ function buildPhoto(){const P=S.photo;const src=PHOTO.img||(PHOTO.sample||(PHOTO
   for(let i=0;i<n;i++){const b=gray?out[i]/255:out[i];for(let k=0;k<3;k++)pid.data[i*4+k]=Math.round(M.base[k]*(1-b)+M.ink[k]*b);pid.data[i*4+3]=255}
   pctx.putImageData(pid,0,0);
   if(dot>0.2)warn.push('Puntos de más de 0,2 mm se ven gruesos: revisa el enfoque o la medida del punto.');
-  if(PHOTO.outline)base.cut=PHOTO.outline.map(r=>r.map(p=>[p[0]*Wmm,p[1]*Wmm]));
+  if(!SRC&&PHOTO.outline)base.cut=PHOTO.outline.map(r=>r.map(p=>[p[0]*Wmm,p[1]*Wmm]));
   Object.assign(base,{raster:ex,preview:pv.toDataURL('image/png'),wpx,hpx,dot,dpi:25.4/dot,ink:ink/n,gray,empty:false});return base}
 function phRender(){const pv=$('pv'),R=RESULT;
   if(R.vec){pv.innerHTML='<g id="geo" pointer-events="none"><rect x="0" y="0" width="'+R.W+'" height="'+R.H+'" fill="var(--card)" stroke="var(--muted)" stroke-dasharray="5 4" vector-effect="non-scaling-stroke"/>'+
@@ -2688,17 +2701,19 @@ $('tlToDesignImg').onclick=()=>{const R=RESULT;if(!R||!TLIMG.img){toast('Primero
   const url=c.toDataURL('image/jpeg',0.9);const name=(TLIMG.name||'foto').replace(/\.[^.]+$/,'')+(TT().tool==='fondo'?'-sin-fondo':'-recorte')+'.jpg';const withCut=$('tlWithCut').checked&&R.outline&&R.outline.length;
   const im=new Image();im.onload=()=>{const id='i'+(++imgSeq);IMGS[id]={img:im,name,url};setTab('diseno');const D=S.design;
     let W=R.W,H=R.H;const k=Math.min(1,D.W*0.9/W,D.H*0.9/H);W*=k;H*=k;const cx=D.W/2,cy=D.H/2;const grp=withCut?'g'+newId():undefined;
-    const o=dsAdd({shape:'img',img:id,style:'dots',cell:1,dmin:0.2,inv:false,full:true,role:'eng',thr:imgGray(id).otsu},0.4);Object.assign(o,{w:W,h:H,x:cx,y:cy});if(grp)o.grp=grp;
+    const ph={...S.photo,invert:false};if(ph.algo==='vector')ph.algo='fs';const rid='i'+(++imgSeq);IMGS[rid]={img:im,name,url};
+    const o=dsAdd({shape:'ras',img:rid,src:id,ph,role:'eng'},0.4);Object.assign(o,{w:W,h:H,x:cx,y:cy});rasRender(o,true);if(grp)o.grp=grp;
     if(withCut){const sid='s'+(++svgSeq);SVGS[sid]={name:TT().tool==='fondo'?'Silueta':'Contorno',...normRings(R.outline)};const bb=bboxOf(R.outline);
       const oc=dsAdd({shape:'svg',svg:sid,role:'cut'},0.4);Object.assign(oc,{w:bb.w*k,h:bb.h*k,x:cx+(bb.x0+bb.w/2-R.W/2)*k,y:cy+(bb.y0+bb.h/2-R.H/2)*k,grp});DS.sel=new Set([o.id,oc.id])}
-    if(k<1)toast('La foto se achicó para caber en el área de trabajo; puedes agrandar el área.');else toast(withCut?'Foto (trama de puntos) y contorno de corte enviados juntos. Usa “Separar” para moverlos por separado.':'Foto enviada como trama de puntos. Puedes cambiar a “Umbral” en el panel de abajo.');
+    if(k<1)toast('La foto se achicó para caber en el área de trabajo; puedes agrandar el área.');else toast(withCut?'Foto y contorno de corte enviados juntos. Elige el tipo de trama en el panel de abajo; “Separar” los suelta.':'Foto enviada. Elige el tipo de trama en el panel de abajo.');
     schedule()};im.src=url};
 $('phToDesign').onclick=()=>{const R=RESULT;if(!R||!R.photo){toast('Primero genera la trama');return}const D=S.design;const k=Math.min(1,D.W*0.9/R.W,D.H*0.9/R.H);const W=R.W*k,H=R.H*k,cx=D.W/2,cy=D.H/2;
   const nm=(PHOTO.name||'foto').replace(/\.[^.]+$/,'');const cutR=R.vec?(S.photo.vuse==='cut'?R.cut.slice(0,-1):[]):(R.cut||[]);const add=(o)=>{const z=dsAdd(o,0.4);Object.assign(z,{w:W,h:H,x:cx,y:cy});return z};
   const finish=(ids)=>{DS.sel=new Set(ids);schedule();toast(k<1?'Trama enviada; se achicó para caber en el área de trabajo.':'Trama enviada a Diseño libre.')};
   if(R.vec){setTab('diseno');const sid='s'+(++svgSeq);SVGS[sid]={name:nm+'-trama',...normFrame(S.photo.vuse==='cut'?cutR:R.engrave,R.W,R.H)};const o=add({shape:'svg',svg:sid,role:S.photo.vuse==='cut'?'hole':'eng'});finish([o.id]);return}
-  const url=R.raster.toDataURL('image/png');const im=new Image();im.onload=()=>{const id='i'+(++imgSeq);IMGS[id]={img:im,name:nm+'-trama.png',url,dot:R.dot};setTab('diseno');
-    const grp=cutR.length?'g'+newId():undefined;const o=add({shape:'ras',img:id,role:'eng'});if(grp)o.grp=grp;const ids=[o.id];
+  const url=R.raster.toDataURL('image/png');const im=new Image();im.onload=()=>{const id='i'+(++imgSeq);IMGS[id]={img:im,name:nm+'-trama.png',url,dot:R.dot};
+    const srcC=PHOTO.img||PHOTO.sample;const src=srcC?rasSrc(srcC,nm+'.jpg'):null;setTab('diseno');
+    const grp=cutR.length?'g'+newId():undefined;const o=add({shape:'ras',img:id,role:'eng',src,ph:{...S.photo}});if(grp)o.grp=grp;const ids=[o.id];
     if(cutR.length){const sid='s'+(++svgSeq);SVGS[sid]={name:'Contorno',...normFrame(cutR,R.W,R.H)};const oc=add({shape:'svg',svg:sid,role:'cut'});oc.grp=grp;ids.push(oc.id)}finish(ids)};im.src=url};
 /* kerf medido */
 $('kfCalc').onclick=()=>{const m=parseFloat(String($('kfMeas').value).replace(',','.'));const K=TT().kerf;const nom=K.n*K.w;if(!(m>0&&m<nom)){toast(`Escribe la medida de las ${K.n} piezas juntas (debe ser menor a ${nom} mm)`);return}
