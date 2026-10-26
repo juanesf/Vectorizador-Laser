@@ -2,7 +2,7 @@
 
 Programa para crear y preparar archivos de corte y grabado con láser CO₂. Convierte letras, números, palabras e imágenes en vectores, diseña cajas y carteles, transforma fotos en tramas y exporta a los formatos que usan LightBurn, RDWorks, Inkscape, CorelDRAW e Illustrator.
 
-Es **un solo archivo HTML** que funciona en el navegador **sin instalar nada y sin internet**: tipografías, íconos y librerías vienen incluidos.
+Es **un solo archivo HTML** que funciona en el navegador **sin instalar nada**: tipografías de diseño, íconos y librerías vienen incluidos. La búsqueda en línea de íconos y algunas tipografías de la interfaz pueden usar internet; el editor y sus exportaciones principales siguen disponibles sin conexión.
 
 **Autores:** Cecilia Vivot y Juan Sanchez · Co-asistido por Claude (Anthropic)
 **Licencia:** [GPL-3.0 o posterior](LICENSE)
@@ -16,7 +16,7 @@ Es **un solo archivo HTML** que funciona en el navegador **sin instalar nada y s
 3. Arriba, junto a las unidades, configura el **área de trabajo de tu máquina** (por ejemplo 600 × 400 mm) y el tamaño de la cuadrícula.
 4. Tu trabajo se guarda solo en el navegador. Para llevarlo a otro computador usa **Guardar proyecto** y después **Abrir proyecto**.
 
-También puedes usarlo en línea activando **GitHub Pages** en este repositorio (Settings → Pages → rama `main`, carpeta raíz). Queda disponible en `https://<tu-usuario>.github.io/vectorizador-laser/`.
+También puedes usarlo en línea con **GitHub Pages**. Hay un workflow de GitHub Actions listo en [`docs/pages.yml`](docs/pages.yml) que compila la aplicación desde sus fuentes y publica `index.html` al actualizar `main` o `zip-repo-full-history`. Para habilitarlo: copia ese archivo a `.github/workflows/pages.yml`, y en **Settings → Pages** selecciona **GitHub Actions** como fuente de publicación. La URL será `https://juanesf.github.io/Vectorizador-Laser/`.
 
 ## Qué hace
 
@@ -77,7 +77,7 @@ build/fuentes.json         lista de tipografías y sus grupos
 index.html                 aplicación lista para usar (generada)
 ```
 
-Después de cambiar `src/template.html`, vuelve a correr `build/build.py` y sube también `index.html`.
+Después de cambiar `src/template.html`, vuelve a correr `build/build.py` y sube también `index.html`. El workflow de GitHub Pages hace esta compilación automáticamente para la versión alojada.
 
 ## Licencia
 
